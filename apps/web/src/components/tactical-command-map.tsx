@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { type EvacuationCorridor, type InfrastructureNode } from "@/lib/vayu-engine";
+import { type EvacuationCorridor, type InfrastructureNode, formatInt } from "@/lib/vayu-engine";
 import {
   AlertCircle,
   Eye,
@@ -236,7 +236,17 @@ export function TacticalCommandMap({
             <g id="sarFloodLayer">
               <ellipse cx="380" cy="330" rx="90" ry="45" fill="url(#sarFloodGrad)" />
               <ellipse cx="510" cy="240" rx="75" ry="38" fill="url(#sarFloodGrad)" />
-              <text x="320" y="325" fill="#C084FC" fontSize="10" fontFamily="monospace" fontWeight="bold">
+              <text
+                x="330"
+                y="380"
+                fill="#C084FC"
+                fontSize="10"
+                fontFamily="monospace"
+                fontWeight="bold"
+                stroke="#06090E"
+                strokeWidth="3"
+                paintOrder="stroke fill"
+              >
                 RISAT-1A SAR INUNDATION (348.6 km²)
               </text>
             </g>
@@ -320,6 +330,18 @@ export function TacticalCommandMap({
                 ? "#00F5FF"
                 : "#10B981";
 
+              const offsets: Record<string, { dx: number; dy: number; anchor: "start" | "end" }> = {
+                S_PURI_220KV: { dx: -12, dy: -10, anchor: "end" },
+                H_PURI_DISTRICT: { dx: 14, dy: -10, anchor: "start" },
+                TC_PURI_TOWER: { dx: -12, dy: 16, anchor: "end" },
+                WP_PURI_HEADWORKS: { dx: 14, dy: 16, anchor: "start" },
+                RB_BALIKUDA_BRIDGE: { dx: 14, dy: -8, anchor: "start" },
+                S_BALIKUDA_132KV: { dx: 14, dy: 16, anchor: "start" },
+                S_PARADIP_220KV: { dx: 14, dy: -8, anchor: "start" },
+                TC_PARADIP_RADIO: { dx: 14, dy: 16, anchor: "start" },
+              };
+              const offset = offsets[node.id] || { dx: 12, dy: 4, anchor: "start" };
+
               return (
                 <g
                   key={node.id}
@@ -348,12 +370,16 @@ export function TacticalCommandMap({
                     strokeWidth="2"
                   />
                   <text
-                    x="11"
-                    y="4"
+                    x={offset.dx}
+                    y={offset.dy}
+                    textAnchor={offset.anchor}
                     fill={isSelected ? "#00F5FF" : "#CBD5E1"}
                     fontSize="9.5"
                     fontFamily="monospace"
                     fontWeight={isSelected ? "bold" : "normal"}
+                    stroke="#06090E"
+                    strokeWidth="3.5"
+                    paintOrder="stroke fill"
                   >
                     {node.name.replace(/\(.*?\)/g, "").trim().slice(0, 18)}
                   </text>
@@ -380,9 +406,9 @@ export function TacticalCommandMap({
               </span>
             </div>
             <div className="text-[11px] text-slate-300 space-y-1">
-              <div>
+              <div suppressHydrationWarning>
                 Elevation: {selectedAsset.elevationM}m · Pop:{" "}
-                {selectedAsset.populationServed.toLocaleString()}
+                {formatInt(selectedAsset.populationServed)}
               </div>
               <div className="text-slate-400">
                 Fragility Prob: {(selectedAsset.failureProbability * 100).toFixed(0)}%

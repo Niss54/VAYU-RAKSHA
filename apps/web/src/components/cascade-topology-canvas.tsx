@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { type DependencyEdge, type InfrastructureNode } from "@/lib/vayu-engine";
+import { type DependencyEdge, type InfrastructureNode, formatInt } from "@/lib/vayu-engine";
 import {
   AlertTriangle,
   Building2,
@@ -196,8 +196,8 @@ export function CascadeTopologyCanvas({ nodes, edges, onNodeSelect }: CascadeTop
           <div className="flex flex-row md:flex-col gap-3 shrink-0 text-right font-mono">
             <div>
               <div className="text-[10px] uppercase text-slate-400">Population Served</div>
-              <div className="text-sm font-bold text-cyan-300">
-                {selectedNode.populationServed.toLocaleString()}
+              <div className="text-sm font-bold text-cyan-300" suppressHydrationWarning>
+                {formatInt(selectedNode.populationServed)}
               </div>
             </div>
             <div>

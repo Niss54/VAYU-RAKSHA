@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { type CounterfactualAction } from "@/lib/vayu-engine";
+import { type CounterfactualAction, formatInt } from "@/lib/vayu-engine";
 import { Check, CheckCircle2, ChevronRight, FileCheck, Play, ShieldAlert, Sparkles, TrendingUp, Users, Zap } from "lucide-react";
 
 interface CounterfactualSandboxProps {
@@ -64,8 +64,8 @@ export function CounterfactualSandbox({
               <Users className="w-3 h-3 text-cyan-400" />
               Protected Citizens
             </div>
-            <div className="text-base font-bold text-cyan-300">
-              +{totalProtected.toLocaleString()}
+            <div className="text-base font-bold text-cyan-300" suppressHydrationWarning>
+              +{formatInt(totalProtected)}
             </div>
           </div>
 

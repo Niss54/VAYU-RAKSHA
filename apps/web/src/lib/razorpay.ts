@@ -104,7 +104,7 @@ export const DISASTER_RELIEF_CAMPAIGNS: DisasterCampaign[] = [
     category: "parametric_pool",
     targetAmountInr: 75000000,
     raisedAmountInr: 58200000,
-    district: "State Coastal Belt (Puri, Kendrapara, Jagatsinghpur, Balasore)",
+    district: "Odisha Coastal Belt",
     suggestedPacks: [
       { amountInr: 5000, title: "Gram Panchayat Micro-Buffer", impactDescription: "Instant DBT liquidity for 2 marginal farmer households" },
       { amountInr: 25000, title: "Coastal Ward Parametric Grant", impactDescription: "Immediate clearance grant for fallen tree removal & road access" },

@@ -860,3 +860,18 @@ export function runVayuRakshaSimulation(
     finalSituationSummary: `VAYU-RAKSHA SITUATION REPORT: Cyclone '${cycloneMetadata.stormName}' at T-${cycloneMetadata.leadTimeHours}h to landfall. Modeled peak wind: ${cycloneMetadata.maxSustainedWindKmh} km/h with a ${surgeCrestM}m storm surge crest. NetworkX cascade engine identified vulnerable trauma hospital feeds; recommended pre-isolation of coastal 220kV substations protects 74,000 citizens.`,
   };
 }
+
+/**
+ * Deterministic number formatter (Indian grouping) that yields identical strings
+ * on both Server (Node.js) and Browser, preventing React hydration mismatches.
+ */
+export function formatInt(num: number): string {
+  if (!num && num !== 0) return "0";
+  const s = Math.round(num).toString();
+  const lastThree = s.slice(-3);
+  const otherNumbers = s.slice(0, -3);
+  return otherNumbers !== ""
+    ? otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree
+    : lastThree;
+}
+
