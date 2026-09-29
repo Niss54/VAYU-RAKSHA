@@ -1,0 +1,75 @@
+[project]
+name = "vayu-raksha-geo"
+version = "2.0.0"
+description = "VAYU-RAKSHA geo service: Anticipatory Cyclone & Infrastructure Cascade Intelligence Platform"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "google-cloud-storage>=2.18",
+    "numpy>=2.0",
+    "pydantic>=2.8",
+    "uvicorn[standard]>=0.30",
+]
+
+[project.optional-dependencies]
+# Offline scenario build (Earth Engine, downloads, dataframes); not needed by the API image.
+build = [
+    "earthengine-api>=1.1",
+    "eccodes>=2.38",
+    # The Windows eccodes wheel bundles the native library; on Linux/macOS it comes from eccodeslib.
+    "eccodeslib>=2.39; sys_platform != 'win32'",
+    "httpx>=0.27",
+    "pandas>=2.2",
+]
+
+[project.scripts]
+shadowcast-geo-build = "shadowcast_geo.build:main"
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.13",
+    "pandas-stubs>=2.2",
+    "pyright>=1.1.380",
+    "pytest>=8.3",
+    "pytest-cov>=5.0",
+    "respx>=0.21",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/shadowcast_geo"]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "ASYNC", "RUF", "PL", "D", "NPY", "PD"]
+ignore = ["PLR2004", "PLR0913"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "PLR2004", "PLR0917"]
+
+[tool.pyright]
+include = ["src", "tests"]
+typeCheckingMode = "strict"
+reportMissingTypeStubs = false
+reportUnknownMemberType = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--cov=shadowcast_geo --cov-report=term-missing --cov-fail-under=90"
+filterwarnings = ["error::FutureWarning"]

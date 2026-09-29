@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Local archive runs and built geo artifacts / download cache
+archive/
+services/geo/artifacts/
+.cache/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.vercel/
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*-key.json
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

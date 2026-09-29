@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+/*
+ * "Satellite console at midnight": the map is the only light source. Depth comes from four stacked dark surfaces and
+ * hairlines, never drop shadows; one amber signal (the risk colour, also the logo) marks risk and the primary action.
+ */
+:root {
+  color-scheme: dark;
+  --surface-0: #0e1012; /* void: page and map backdrop */
+  --surface-1: #15171b; /* panels */
+  --surface-2: #1c1f24; /* raised: inputs, tiles */
+  --surface-3: #23262d; /* hover */
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
+  --glass: rgb(21 23 27 / 0.8);
+  --text-primary: #ffffff;
+  --text-secondary: #a0aaba;
+  --text-muted: #8b96aa;
+  --accent: #f28a2e; /* the amber signal */
+  --on-accent: #1d0f03;
+  --series-1: #f28a2e;
+  --member: #7fa7d9; /* ensemble member tracks: cool, recessive */
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+@layer components {
+  /* Floating instrument panel over the map. */
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(16px) saturate(1.2);
+  }
+
+  /* Tracked uppercase instrument label. */
+  .label {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .readout {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Pill segmented control. */
+  .segment {
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition:
+      color 150ms,
+      background-color 150ms;
+  }
+  .segment:hover {
+    color: var(--text-primary);
+  }
+  .segment[aria-checked="true"],
+  .segment[aria-selected="true"],
+  .segment[aria-pressed="true"] {
+    background: var(--text-primary);
+    color: var(--surface-0);
+  }
+
+  .btn-primary {
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+  }
+  .btn-primary:hover {
+    filter: brightness(1.08);
+  }
+  .btn-ghost {
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    color: var(--text-primary);
+  }
+  .btn-ghost:hover {
+    background: var(--surface-3);
+  }
+}
+
+/* Live alert cards land slightly tilted and slide in as the replay moves. */
+@keyframes alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) rotate(var(--tilt, 0deg)) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--tilt, 0deg));
+  }
+}
+.alert-card {
+  transform: rotate(var(--tilt, 0deg));
+  animation: alert-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .alert-card {
+    animation: none;
+  }
+}
+
+/* Timeline scrubber: hairline track, amber thumb. */
+input[type="range"].scrub {
+  appearance: none;
+  height: 20px;
+  background: transparent;
+}
+input[type="range"].scrub::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--line-strong);
+}
+input[type="range"].scrub::-moz-range-track {
+  height: 2px;
+  background: var(--line-strong);
+}
+input[type="range"].scrub::-webkit-slider-thumb {
+  appearance: none;
+  margin-top: -7px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgb(242 138 46 / 0.25);
+}
+input[type="range"].scrub::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgb(242 138 46 / 0.25);
+}
+
+/* deck.gl tooltip, restyled as an instrument readout. */
+.deck-tooltip {
+  background: var(--surface-1) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  font-size: 12px !important;
+  white-space: pre-line;
+}

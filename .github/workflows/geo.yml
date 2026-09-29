@@ -1,0 +1,34 @@
+name: geo
+
+on:
+  push:
+    branches: [main]
+    paths: ["services/geo/**", ".github/workflows/geo.yml"]
+  pull_request:
+    paths: ["services/geo/**", ".github/workflows/geo.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/geo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --frozen --all-extras
+      - name: Lint
+        run: uv run ruff check .
+      - name: Format
+        run: uv run ruff format --check .
+      - name: Type check (strict)
+        run: uv run pyright
+      - name: Test (coverage >= 90%)
+        run: uv run pytest
+      - name: Container builds
+        run: docker build -t shadowcast-geo .

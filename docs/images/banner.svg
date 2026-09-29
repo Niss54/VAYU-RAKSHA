@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 360" width="1280" height="360" role="img" aria-label="ShadowCast: Forecasts say where a cyclone goes. ShadowCast says what it will break, and proves it by satellite.">
+  <defs>
+    <radialGradient id="lit" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#FFE2B0"/><stop offset="1" stop-color="#F28A2E"/></radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F28A2E" stop-opacity="0.28"/><stop offset="1" stop-color="#F28A2E" stop-opacity="0"/></radialGradient>
+    <linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="#F28A2E" stop-opacity="0"/><stop offset="1" stop-color="#F28A2E" stop-opacity="0.9"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#FFFFFF" stroke-opacity="0.035"/></pattern>
+    <clipPath id="card"><rect width="1280" height="360" rx="18"/></clipPath>
+  </defs>
+  <g clip-path="url(#card)">
+    <rect width="1280" height="360" fill="#0e1012"/>
+    <rect width="1280" height="360" fill="url(#grid)"/>
+    <!-- storm track and coast lights, echoing the console map -->
+    <g transform="translate(78 -8)">
+    <path d="M1010 380 C 1040 300, 1090 230, 1130 170 S 1220 40, 1260 -20" fill="none" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2"/>
+    <g fill="#F28A2E">
+      <circle cx="1100" cy="215" r="4" opacity="0.9"/><circle cx="1114" cy="228" r="3" opacity="0.8"/><circle cx="1088" cy="232" r="3.5" opacity="0.75"/>
+      <circle cx="1125" cy="205" r="3" opacity="0.85"/><circle cx="1076" cy="248" r="2.5" opacity="0.6"/><circle cx="1136" cy="190" r="2.5" opacity="0.7"/>
+      <circle cx="1060" cy="262" r="2" opacity="0.5"/><circle cx="1150" cy="176" r="2" opacity="0.6"/><circle cx="1045" cy="276" r="2" opacity="0.4"/>
+      <circle cx="1104" cy="245" r="2.5" opacity="0.7"/><circle cx="1120" cy="242" r="2" opacity="0.55"/><circle cx="1142" cy="214" r="2.5" opacity="0.65"/>
+      <circle cx="1165" cy="160" r="1.8" opacity="0.5"/><circle cx="1030" cy="292" r="1.6" opacity="0.35"/><circle cx="1180" cy="146" r="1.6" opacity="0.4"/>
+    </g>
+    <circle cx="1112" cy="222" r="34" fill="none" stroke="#F28A2E" stroke-opacity="0.55" stroke-width="1.5"/>
+    <circle cx="1112" cy="222" r="58" fill="none" stroke="#F28A2E" stroke-opacity="0.22" stroke-width="1"/>
+    <circle cx="1112" cy="222" r="16" fill="#F28A2E" fill-opacity="0.18" stroke="#FFFFFF" stroke-width="1.5"/>
+    </g>
+    <!-- logo -->
+    <circle cx="170" cy="180" r="150" fill="url(#glow)"/>
+    <g transform="translate(66 76) scale(3.25)">
+      <circle cx="32.00" cy="40.20" r="3.40" fill="#4A4945" stroke="#8F8E86" stroke-width="0.6" opacity="0.95"/>
+      <circle cx="26.47" cy="40.60" r="2.90" fill="#4A4945" stroke="#8F8E86" stroke-width="0.6" opacity="0.85"/>
+      <circle cx="21.54" cy="38.29" r="2.50" fill="#4A4945" stroke="#8F8E86" stroke-width="0.6" opacity="0.78"/>
+      <circle cx="17.72" cy="33.70" r="2.13" fill="#4A4945" stroke="#8F8E86" stroke-width="0.6" opacity="0.71"/>
+      <circle cx="15.87" cy="27.29" r="1.78" fill="#4A4945" stroke="#8F8E86" stroke-width="0.6" opacity="0.64"/>
+      <circle cx="16.72" cy="19.86" r="1.45" fill="#4A4945" stroke="#8F8E86" stroke-width="0.6" opacity="0.57"/>
+      <circle cx="20.72" cy="12.46" r="1.12" fill="#4A4945" stroke="#8F8E86" stroke-width="0.6" opacity="0.51"/>
+      <circle cx="27.93" cy="6.32" r="0.80" fill="#4A4945" stroke="#8F8E86" stroke-width="0.6" opacity="0.45"/>
+      <circle cx="32.00" cy="23.80" r="3.40" fill="url(#lit)" opacity="1.00"/>
+      <circle cx="37.53" cy="23.40" r="2.90" fill="url(#lit)" opacity="0.94"/>
+      <circle cx="42.46" cy="25.71" r="2.50" fill="url(#lit)" opacity="0.90"/>
+      <circle cx="46.28" cy="30.30" r="2.13" fill="url(#lit)" opacity="0.85"/>
+      <circle cx="48.13" cy="36.71" r="1.78" fill="url(#lit)" opacity="0.81"/>
+      <circle cx="47.28" cy="44.14" r="1.45" fill="url(#lit)" opacity="0.77"/>
+      <circle cx="43.28" cy="51.54" r="1.12" fill="url(#lit)" opacity="0.74"/>
+      <circle cx="36.07" cy="57.68" r="0.80" fill="url(#lit)" opacity="0.70"/>
+      <circle cx="32.0" cy="32.0" r="2.6" fill="none" stroke="#FFFFFF" stroke-width="1.5"/>
+    </g>
+    <!-- text -->
+    <text x="340" y="112" fill="#F28A2E" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="15" letter-spacing="3.5">IMPACT FORECAST &#183; PROVEN BY SATELLITE</text>
+    <text x="336" y="186" fill="#FFFFFF" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-1.5">ShadowCast</text>
+    <text x="340" y="236" fill="#B9BCC2" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="25">Forecasts say where a cyclone goes.</text>
+    <text x="340" y="272" fill="#FFFFFF" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="25">ShadowCast says <tspan fill="#F28A2E" font-weight="600">what it will break</tspan> &#8212; and proves it by satellite.</text>
+    <rect x="340" y="304" width="220" height="2" fill="url(#fade)" transform="rotate(180 450 305)"/>
+    <text x="340" y="330" fill="#6F737B" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12.5" letter-spacing="2">BUILD WITH AI: CODE FOR COMMUNITIES &#183; TRACK 5 &#183; CYCLONE IMPACT</text>
+  </g>
+</svg>
