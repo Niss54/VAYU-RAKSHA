@@ -35,3 +35,26 @@ The agent and audio routes use Application Default Credentials (`gcloud auth app
 To use a local geo API instead, run `uv run uvicorn shadowcast_geo.api:create_app --factory --port 8000` in `services/geo` and set `GEO_API_URL=http://localhost:8000`.
 
 The Maps key must be a browser key restricted to the Maps JavaScript API and to your origins (`localhost:3000`, `*.vercel.app`).
+
+## Datadog Infrastructure & APM Monitoring
+
+The web application integrates Datadog for production observability, APM tracing, and infrastructure telemetry.
+
+### Configuration (`.env.local` / `.env`):
+```env
+DD_API_KEY=your_datadog_api_key
+DD_APP_KEY=your_datadog_application_key
+DD_SERVICE_NAME=VAYU-RAKSHA
+DD_SITE=datadoghq.com
+DD_ENV=development
+```
+
+### Features:
+- **APM Tracing**: Powered by `dd-trace` initialized in `src/instrumentation.ts`.
+- **Infrastructure Metrics**: Collects Node.js heap memory, CPU usage, process uptime, and system memory, shipped to Datadog V2 Series API.
+- **Diagnostics**:
+  - `GET /api/health/datadog`: Checks key presence and configuration safely without leaking secrets.
+  - `POST /api/health/datadog`: Dispatches a live telemetry heartbeat and infrastructure metrics snapshot.
+  - CLI Test: `node -r dotenv/config scripts/test-datadog.js dotenv_config_path=.env.local`
+- **Fail-Safe**: Non-blocking and resilient — if Datadog is unreachable or credentials are missing, the application runs normally without interruption.
+

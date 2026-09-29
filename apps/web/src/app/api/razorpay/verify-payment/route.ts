@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyRazorpaySignature, RazorpayVerificationPayload } from "@/lib/razorpay";
+import { sendDonationReceiptEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -39,6 +40,20 @@ export async function POST(req: NextRequest) {
     }
 
     const certificateId = `80G-VR-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    // Dispatch official 80G tax receipt & donation confirmation email via Resend
+    if (donorEmail && donorEmail.includes("@")) {
+      sendDonationReceiptEmail(donorEmail, {
+        donorName,
+        amount,
+        orderId: razorpay_order_id,
+        paymentId: razorpay_payment_id,
+        certificateId,
+        campaign: campaignId || "SDRF-ODISHA-RELIEF",
+      }).catch((emailErr) => {
+        console.warn("[VAYU-RAKSHA] Non-blocking donation receipt email failed:", emailErr?.message || emailErr);
+      });
+    }
 
     return NextResponse.json({
       success: true,

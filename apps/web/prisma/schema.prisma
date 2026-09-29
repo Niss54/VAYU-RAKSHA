@@ -1,0 +1,170 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ───────────────────────────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+  OFFICER
+  VOLUNTEER
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DELETED
+  PENDING
+  TRIGGERED
+  COMPLETED
+}
+
+// ─── USERS ───────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String?   @map("password_hash")
+  name          String
+  avatarUrl     String?   @map("avatar_url")
+  role          Role      @default(USER)
+  isVerified    Boolean   @default(false) @map("is_verified")
+  verifyToken   String?   @unique @map("verify_token")
+  resetToken    String?   @unique @map("reset_token")
+  resetExpires  DateTime? @map("reset_expires")
+  lastLoginAt   DateTime? @map("last_login_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  sessions      Session[]
+  auditLogs     AuditLog[]
+  reports       SituationReport[]
+  donations     Donation[]
+
+  @@index([email])
+  @@map("users")
+}
+
+// ─── SESSIONS ────────────────────────────────────────────
+
+model Session {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  refreshToken  String   @unique @map("refresh_token")
+  userAgent     String?  @map("user_agent")
+  ipAddress     String?  @map("ip_address")
+  expiresAt     DateTime @map("expires_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([refreshToken])
+  @@map("sessions")
+}
+
+// ─── SITUATION REPORTS ───────────────────────────────────
+
+model SituationReport {
+  id          String   @id @default(cuid())
+  userId      String?  @map("user_id")
+  district    String
+  cycloneName String   @default("AMPHAN-26") @map("cyclone_name")
+  severity    String   @default("HIGH") // HIGH | EXTREME | CRITICAL
+  status      Status   @default(ACTIVE)
+  summary     String
+  affectedPop Int?     @map("affected_pop")
+  powerOutage Boolean  @default(false) @map("power_outage")
+  telecomDown Boolean  @default(false) @map("telecom_down")
+  coordinates Json?    // [lat, lng]
+  metadata    Json?    // extra telemetry
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([district])
+  @@index([status])
+  @@index([severity])
+  @@index([createdAt])
+  @@map("situation_reports")
+}
+
+// ─── AUDIT LOG ───────────────────────────────────────────
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?  @map("user_id")
+  action    String   // e.g., "USER_LOGIN", "DISPATCH_AUTHORIZED", "PAYOUT_TRIGGERED"
+  tableName String?  @map("table_name")
+  recordId  String?  @map("record_id")
+  oldValue  Json?    @map("old_value")
+  newValue  Json?    @map("new_value")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ─── DISASTER RELIEF DONATIONS (Razorpay) ────────────────
+
+model Donation {
+  id                String   @id @default(cuid())
+  userId            String?  @map("user_id")
+  donorName         String   @map("donor_name")
+  donorEmail        String   @map("donor_email")
+  amount            Float
+  currency          String   @default("INR")
+  razorpayOrderId   String   @unique @map("razorpay_order_id")
+  razorpayPaymentId String?  @unique @map("razorpay_payment_id")
+  razorpaySignature String?  @map("razorpay_signature")
+  status            String   @default("created") // created | paid | failed
+  campaign          String   @default("SDRF-ODISHA-RELIEF")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([donorEmail])
+  @@index([status])
+  @@index([createdAt])
+  @@map("donations")
+}
+
+// ─── PARAMETRIC RELIEF DISBURSEMENTS ─────────────────────
+
+model ParametricDisbursement {
+  id               String    @id @default(cuid())
+  beneficiaryName  String    @map("beneficiary_name")
+  beneficiaryVpa   String    @map("beneficiary_vpa")
+  aadhaarLast4     String    @map("aadhaar_last4")
+  district         String
+  category         String    // "FISHERFOLK" | "SMALL_FARMER" | "KUTCHA_HOUSE"
+  amount           Float
+  triggerCondition String    @map("trigger_condition") // "WIND_SPEED > 140km/h"
+  status           Status    @default(TRIGGERED)
+  payoutTxId       String?   @unique @map("payout_tx_id")
+  triggeredAt      DateTime  @default(now()) @map("triggered_at")
+  disbursedAt      DateTime? @map("disbursed_at")
+
+  @@index([district])
+  @@index([status])
+  @@index([triggeredAt])
+  @@map("parametric_disbursements")
+}

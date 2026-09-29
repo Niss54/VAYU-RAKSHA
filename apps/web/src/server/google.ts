@@ -10,9 +10,21 @@ import { type ExternalAccountClientOptions, ExternalAccountClient } from "google
 
 import type { Advisory, AdvisorySummary } from "@/lib/advisory";
 
-const PROJECT = process.env.GOOGLE_CLOUD_PROJECT ?? "vayu-raksha-2026";
+const PROJECT =
+  process.env.GOOGLE_CLOUD_PROJECT ??
+  process.env.FIREBASE_PROJECT_ID ??
+  "vayu-raksha";
 const PROVIDER = process.env.GCP_WORKLOAD_IDENTITY_PROVIDER; // projects/<number>/locations/global/workloadIdentityPools/<pool>/providers/<provider>
 const SERVICE_ACCOUNT = process.env.GCP_SERVICE_ACCOUNT_EMAIL;
+
+/** Firebase / Google Cloud service account credentials from environment variables */
+const serviceAccountCredentials =
+  process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY
+    ? {
+        client_email: process.env.FIREBASE_CLIENT_EMAIL,
+        private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+      }
+    : undefined;
 
 /** On Vercel: exchange the deployment's OIDC token for short-lived credentials of a least-privilege service account. */
 const federated: ExternalAccountClientOptions | undefined =
@@ -33,12 +45,20 @@ export const GEMINI_MODEL = "gemini-3.8-flash";
 export const vertex = createVertex({
   project: PROJECT,
   location: "global",
-  googleAuthOptions: federated && { credentials: federated },
+  googleAuthOptions: federated
+    ? { credentials: federated }
+    : serviceAccountCredentials
+    ? { credentials: serviceAccountCredentials }
+    : undefined,
 });
 
 const firestore = new Firestore({
   projectId: PROJECT,
-  ...(federated && { authClient: ExternalAccountClient.fromJSON(federated) }),
+  ...(federated
+    ? { authClient: ExternalAccountClient.fromJSON(federated) }
+    : serviceAccountCredentials
+    ? { credentials: serviceAccountCredentials }
+    : {}),
 });
 const advisories = firestore.collection("advisories");
 
