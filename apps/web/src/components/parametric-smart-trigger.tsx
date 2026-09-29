@@ -123,6 +123,81 @@ export function ParametricSmartTrigger({ insurance }: ParametricSmartTriggerProp
           <span className="text-cyan-400">{insurance.insuredEntity}</span>
         </div>
       </div>
+
+      {/* RazorpayX Direct Benefit Liquidity Disbursement CTA */}
+      <RazorpayXPayoutButton insurance={insurance} />
     </div>
   );
 }
+
+function RazorpayXPayoutButton({ insurance }: { insurance: ParametricInsuranceTrigger }) {
+  const [isDisbursing, setIsDisbursing] = React.useState(false);
+  const [payoutResult, setPayoutResult] = React.useState<any | null>(null);
+
+  const handleDisburse = async () => {
+    setIsDisbursing(true);
+    try {
+      const res = await fetch("/api/razorpay/parametric-payout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          payoutBatchId: `VR_BATCH_${Date.now().toString(36).toUpperCase()}`,
+          district: "Coastal Odisha (Puri / Jagatsinghpur)",
+          panchayatCount: 42,
+          totalAmountInr: insurance.payoutLiquidityInrCrores * 10000000,
+          hollandWindPeakKmph: insurance.observedWindKmh,
+          floodInundationPct: insurance.observedFloodPct,
+          triggerSource: "OSDMA_RISAT_SAR",
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPayoutResult(data);
+      }
+    } catch (e) {
+      console.error("Payout trigger error:", e);
+    } finally {
+      setIsDisbursing(false);
+    }
+  };
+
+  if (payoutResult) {
+    return (
+      <div className="p-3 bg-emerald-950/50 border border-emerald-500/40 rounded-xl font-mono text-xs space-y-2 animate-in fade-in">
+        <div className="flex items-center justify-between text-emerald-300 font-bold">
+          <span className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+            RAZORPAYX DIRECT BANKING DISBURSEMENT EXECUTED
+          </span>
+          <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200">
+            UTR: {payoutResult.payout.utrNumber}
+          </span>
+        </div>
+        <div className="text-[11px] text-slate-300">
+          Disbursed <strong className="text-white">₹{insurance.payoutLiquidityInrCrores} Crores</strong> via RazorpayX IMPS/UPI directly across <strong>{payoutResult.payout.recipientCount} Coastal Gram Panchayats</strong> in accordance with SDRF rapid-response guidelines.
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      onClick={handleDisburse}
+      disabled={isDisbursing}
+      className="w-full py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-mono font-bold text-xs rounded-xl shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2 transition disabled:opacity-50"
+    >
+      {isDisbursing ? (
+        <>
+          <span className="animate-spin">⏳</span>
+          <span>DISPATCHING RAZORPAYX PARAMETRIC BATCH...</span>
+        </>
+      ) : (
+        <>
+          <span>⚡</span>
+          <span>EXECUTE RAZORPAYX DIRECT BENEFIT DISBURSEMENT (₹{insurance.payoutLiquidityInrCrores} CR)</span>
+        </>
+      )}
+    </button>
+  );
+}
+

@@ -13,6 +13,7 @@ import { CounterfactualSandbox } from "@/components/counterfactual-sandbox";
 import { MultilingualAdvisoryHub } from "@/components/multilingual-advisory-hub";
 import { ParametricSmartTrigger } from "@/components/parametric-smart-trigger";
 import { TacticalCommandMap } from "@/components/tactical-command-map";
+import { RazorpayReliefModal } from "@/components/razorpay-relief-modal";
 import { tacticalSound } from "@/lib/sound-effects";
 import {
   Activity,
@@ -49,6 +50,7 @@ export function VayuConsole({ initialScenario = "fani" }: VayuConsoleProps) {
     "S_PURI_220KV",
     "H_PURI_DISTRICT",
   ]);
+  const [isReliefModalOpen, setIsReliefModalOpen] = useState(false);
   const [state, setState] = useState<VayuRakshaState>(() =>
     runVayuRakshaSimulation(initialScenario, hardenedNodeIds)
   );
@@ -243,6 +245,19 @@ ${state.rankedActionQueue
                   T-{state.cycloneMetadata.leadTimeHours}h
                 </div>
               </div>
+
+              {/* Razorpay Disaster Relief Portal Trigger */}
+              <button
+                onClick={() => {
+                  setIsReliefModalOpen(true);
+                  tacticalSound.playRadarPing();
+                }}
+                className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-950 via-teal-950 to-slate-900 border border-cyan-400/50 hover:border-cyan-300 text-cyan-300 hover:text-white font-mono text-xs font-bold flex items-center gap-1.5 transition shadow-lg shadow-cyan-500/10 cursor-pointer"
+                title="Launch Razorpay Disaster Relief & SDRF Community Fund"
+              >
+                <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span>🇮🇳 RELIEF FUND (RAZORPAY)</span>
+              </button>
             </div>
           </div>
         </div>
@@ -499,6 +514,11 @@ ${state.rankedActionQueue
           </div>
         </div>
       </footer>
+      {/* 5. Razorpay Disaster Relief Modal */}
+      <RazorpayReliefModal
+        isOpen={isReliefModalOpen}
+        onClose={() => setIsReliefModalOpen(false)}
+      />
     </div>
   );
 }
