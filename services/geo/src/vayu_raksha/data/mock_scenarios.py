@@ -362,3 +362,28 @@ def get_cyclone_dana_metadata() -> CycloneMetadata:
         ],
         "ensemble_member_count": 51,
     }
+
+
+def get_cyclone_amphan_metadata() -> CycloneMetadata:
+    """Super Cyclonic Storm Amphan (May 2020 - Bay of Bengal)."""
+    return {
+        "storm_id": "AMPHAN_2020_NORTH_INDIAN_OCEAN",
+        "storm_name": "Amphan",
+        "basin": "North Indian Ocean (Bay of Bengal)",
+        "current_center": {"lat": 21.6500, "lon": 88.3500},
+        "max_sustained_wind_kt": 85.0,
+        "max_sustained_wind_kmh": 155.0,
+        "central_pressure_hpa": 950.0,
+        "forward_speed_kmh": 22.0,
+        "heading_deg": 355.0,
+        "category_imd": "Very Severe Cyclonic Storm (VSCS)",
+        "forecast_landfall_time": "2020-05-20T17:30:00+05:30",
+        "lead_time_hours": 24.0,
+        "trajectory": [
+            {"time_utc": "2020-05-19T00:00:00Z", "lat": 16.0, "lon": 86.8, "wind_kt": 130, "pressure_hpa": 915},
+            {"time_utc": "2020-05-19T12:00:00Z", "lat": 18.2, "lon": 87.2, "wind_kt": 115, "pressure_hpa": 930},
+            {"time_utc": "2020-05-20T00:00:00Z", "lat": 20.2, "lon": 87.8, "wind_kt": 95, "pressure_hpa": 945},
+            {"time_utc": "2020-05-20T12:00:00Z", "lat": 21.7, "lon": 88.4, "wind_kt": 85, "pressure_hpa": 950},
+        ],
+        "ensemble_member_count": 51,
+    }

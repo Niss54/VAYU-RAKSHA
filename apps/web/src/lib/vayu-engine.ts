@@ -485,44 +485,62 @@ export function getBaselineInfrastructure(): { nodes: InfrastructureNode[]; edge
 
 // 5-Agent Cascade Evaluation Engine
 export function runVayuRakshaSimulation(
-  scenarioType: "fani" | "dana" = "fani",
+  scenarioType: "fani" | "dana" | "amphan" = "fani",
   hardenedNodeIds: string[] = []
 ): VayuRakshaState {
   const { nodes: rawNodes, edges } = getBaselineInfrastructure();
   const hardenedSet = new Set(hardenedNodeIds);
 
-  const isFani = scenarioType === "fani";
-  const cycloneMetadata: CycloneMetadata = isFani
-    ? {
-        stormId: "FANI_2019_NORTH_INDIAN_OCEAN",
-        stormName: "Fani",
-        basin: "North Indian Ocean (Bay of Bengal)",
-        currentCenter: { lat: 19.45, lon: 85.58 },
-        maxSustainedWindKt: 115.0,
-        maxSustainedWindKmh: 215.0,
-        centralPressureHpa: 932.0,
-        forwardSpeedKmh: 19.5,
-        headingDeg: 335.0,
-        categoryImd: "Extremely Severe Cyclonic Storm (ESCS)",
-        forecastLandfallTime: "2019-05-03T08:00:00+05:30",
-        leadTimeHours: 36.0,
-        ensembleMemberCount: 51,
-      }
-    : {
-        stormId: "DANA_2024_ODISHA_COAST",
-        stormName: "Dana",
-        basin: "North Indian Ocean (Bay of Bengal)",
-        currentCenter: { lat: 20.12, lon: 86.95 },
-        maxSustainedWindKt: 65.0,
-        maxSustainedWindKmh: 120.0,
-        centralPressureHpa: 984.0,
-        forwardSpeedKmh: 15.0,
-        headingDeg: 320.0,
-        categoryImd: "Severe Cyclonic Storm (SCS)",
-        forecastLandfallTime: "2024-10-25T01:30:00+05:30",
-        leadTimeHours: 44.0,
-        ensembleMemberCount: 51,
-      };
+  let cycloneMetadata: CycloneMetadata;
+  if (scenarioType === "fani") {
+    cycloneMetadata = {
+      stormId: "FANI_2019_NORTH_INDIAN_OCEAN",
+      stormName: "Fani",
+      basin: "North Indian Ocean (Bay of Bengal)",
+      currentCenter: { lat: 19.45, lon: 85.58 },
+      maxSustainedWindKt: 115.0,
+      maxSustainedWindKmh: 215.0,
+      centralPressureHpa: 932.0,
+      forwardSpeedKmh: 19.5,
+      headingDeg: 335.0,
+      categoryImd: "Extremely Severe Cyclonic Storm (ESCS)",
+      forecastLandfallTime: "2019-05-03T08:00:00+05:30",
+      leadTimeHours: 36.0,
+      ensembleMemberCount: 51,
+    };
+  } else if (scenarioType === "dana") {
+    cycloneMetadata = {
+      stormId: "DANA_2024_ODISHA_COAST",
+      stormName: "Dana",
+      basin: "North Indian Ocean (Bay of Bengal)",
+      currentCenter: { lat: 20.12, lon: 86.95 },
+      maxSustainedWindKt: 65.0,
+      maxSustainedWindKmh: 120.0,
+      centralPressureHpa: 984.0,
+      forwardSpeedKmh: 15.0,
+      headingDeg: 320.0,
+      categoryImd: "Severe Cyclonic Storm (SCS)",
+      forecastLandfallTime: "2024-10-25T01:30:00+05:30",
+      leadTimeHours: 44.0,
+      ensembleMemberCount: 51,
+    };
+  } else {
+    cycloneMetadata = {
+      stormId: "AMPHAN_2020_NORTH_INDIAN_OCEAN",
+      stormName: "Amphan",
+      basin: "North Indian Ocean (Bay of Bengal)",
+      currentCenter: { lat: 21.65, lon: 88.35 },
+      maxSustainedWindKt: 85.0,
+      maxSustainedWindKmh: 155.0,
+      centralPressureHpa: 950.0,
+      forwardSpeedKmh: 22.0,
+      headingDeg: 355.0,
+      categoryImd: "Very Severe Cyclonic Storm (VSCS)",
+      forecastLandfallTime: "2020-05-20T17:30:00+05:30",
+      leadTimeHours: 24.0,
+      ensembleMemberCount: 51,
+    };
+  }
 
   const surgeCrestM = computeStormSurge(cycloneMetadata.centralPressureHpa, cycloneMetadata.maxSustainedWindKt);
 

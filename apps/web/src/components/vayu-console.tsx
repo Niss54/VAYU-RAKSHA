@@ -13,11 +13,13 @@ import { CounterfactualSandbox } from "@/components/counterfactual-sandbox";
 import { MultilingualAdvisoryHub } from "@/components/multilingual-advisory-hub";
 import { ParametricSmartTrigger } from "@/components/parametric-smart-trigger";
 import { TacticalCommandMap } from "@/components/tactical-command-map";
+import { tacticalSound } from "@/lib/sound-effects";
 import {
   Activity,
   AlertTriangle,
   Compass,
   Cpu,
+  Download,
   Gauge,
   Globe,
   Layers,
@@ -35,11 +37,11 @@ import {
 } from "lucide-react";
 
 interface VayuConsoleProps {
-  initialScenario?: "fani" | "dana";
+  initialScenario?: "fani" | "dana" | "amphan";
 }
 
 export function VayuConsole({ initialScenario = "fani" }: VayuConsoleProps) {
-  const [scenario, setScenario] = useState<"fani" | "dana">(initialScenario);
+  const [scenario, setScenario] = useState<"fani" | "dana" | "amphan">(initialScenario);
   const [activeTab, setActiveTab] = useState<
     "overview" | "map" | "cascade" | "counterfactual" | "advisories" | "insurance"
   >("overview");
@@ -77,13 +79,56 @@ export function VayuConsole({ initialScenario = "fani" }: VayuConsoleProps) {
         ? Array.from(new Set([...newHardened, ...ids]))
         : newHardened.filter((id) => !ids.includes(id));
     }
+    if (approved) {
+      tacticalSound.playAuthorizeChime();
+    } else {
+      tacticalSound.playRadarPing();
+    }
     setHardenedNodeIds(newHardened);
     setState(runVayuRakshaSimulation(scenario, newHardened));
   };
 
-  const handleScenarioChange = (newScenario: "fani" | "dana") => {
+  const handleScenarioChange = (newScenario: "fani" | "dana" | "amphan") => {
+    tacticalSound.playRadarPing();
     setScenario(newScenario);
     setState(runVayuRakshaSimulation(newScenario, hardenedNodeIds));
+  };
+
+  const handleExportReport = () => {
+    tacticalSound.playAuthorizeChime();
+    const md = `# 🚨 VAYU-RAKSHA DDMA SITUATION DIRECTIVE
+Generated: ${new Date().toISOString()}
+Target Cyclone: ${state.cycloneMetadata.stormName.toUpperCase()}
+Category: ${state.cycloneMetadata.categoryImd}
+Peak Wind: ${state.cycloneMetadata.maxSustainedWindKmh} km/h (${state.cycloneMetadata.maxSustainedWindKt} kt)
+Modeled Surge: +${state.atmosphericData.stormSurgeCrestM}m
+SAR Flood Area: ${state.earthData.waterExtentSqkm} sq km
+
+## 1. PRE-LANDFALL ACTION QUEUE
+${state.rankedActionQueue
+  .map(
+    (a, i) =>
+      `### #${i + 1} [${a.priority}] ${a.actionTitle}
+- Deadline: ${a.windowDeadline}
+- Protected Population: +${a.deltaPopulationProtected.toLocaleString()}
+- Saved Cascade Nodes: ${a.cascadeNodesSaved}
+- Rationale: ${a.description}
+`
+  )
+  .join("\n")}
+
+## 2. PARAMETRIC REINSURANCE SMART DISBURSEMENT
+- Status: ${state.parametricInsurance.triggerStatus}
+- Amount: ₹${state.parametricInsurance.payoutLiquidityInrCrores} Crores
+- Cryptographic Hash: ${state.parametricInsurance.payoutSmartContractHash}
+`;
+    const blob = new Blob([md], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `VAYU-RAKSHA-${state.cycloneMetadata.stormName}-SITUATION-BRIEF.md`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleSendPrompt = (textToSend?: string) => {
@@ -163,6 +208,16 @@ export function VayuConsole({ initialScenario = "fani" }: VayuConsoleProps) {
                 }`}
               >
                 Cyclone Dana (2024)
+              </button>
+              <button
+                onClick={() => handleScenarioChange("amphan")}
+                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                  scenario === "amphan"
+                    ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                Amphan (2020)
               </button>
             </div>
 
@@ -247,9 +302,18 @@ export function VayuConsole({ initialScenario = "fani" }: VayuConsoleProps) {
             <div className="lg:col-span-2 space-y-6">
               {/* Situation Banner */}
               <div className="glass-tactical p-5 rounded-2xl border border-cyan-500/30">
-                <div className="flex items-center gap-2 mb-2 text-xs font-mono text-cyan-400 font-bold">
-                  <ShieldAlert className="w-4 h-4" />
-                  EXECUTIVE SITUATION DIRECTIVE · NIRNAY SUPERVISOR
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 font-bold">
+                    <ShieldAlert className="w-4 h-4" />
+                    EXECUTIVE SITUATION DIRECTIVE · NIRNAY SUPERVISOR
+                  </div>
+                  <button
+                    onClick={handleExportReport}
+                    className="px-3 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5 text-cyan-400" />
+                    Export Brief (.MD)
+                  </button>
                 </div>
                 <p className="text-sm text-slate-200 leading-relaxed font-sans">
                   {state.finalSituationSummary}
