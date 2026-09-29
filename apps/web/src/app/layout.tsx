@@ -1,27 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "ShadowCast",
+  title: "VAYU-RAKSHA | Anticipatory Cyclone & Infrastructure Cascade Intelligence Platform",
   description:
-    "Impact-based cyclone forecasting per asset: which substations, hospitals and shelters a storm will hit, why, and proof from satellites.",
+    "From satellite to autonomous municipal action — 72 hours before landfall. Track 5: Track-Based Cyclone Impact & Infrastructure Vulnerability Forecaster.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full">{children}</body>
+    <html lang="en" className="h-full antialiased dark">
+      <body className="min-h-full bg-[#06090E] text-slate-100">{children}</body>
     </html>
   );
 }

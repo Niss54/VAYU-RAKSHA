@@ -12,6 +12,7 @@ import { CascadeTopologyCanvas } from "@/components/cascade-topology-canvas";
 import { CounterfactualSandbox } from "@/components/counterfactual-sandbox";
 import { MultilingualAdvisoryHub } from "@/components/multilingual-advisory-hub";
 import { ParametricSmartTrigger } from "@/components/parametric-smart-trigger";
+import { TacticalCommandMap } from "@/components/tactical-command-map";
 import {
   Activity,
   AlertTriangle,
@@ -40,7 +41,7 @@ interface VayuConsoleProps {
 export function VayuConsole({ initialScenario = "fani" }: VayuConsoleProps) {
   const [scenario, setScenario] = useState<"fani" | "dana">(initialScenario);
   const [activeTab, setActiveTab] = useState<
-    "overview" | "cascade" | "counterfactual" | "advisories" | "insurance"
+    "overview" | "map" | "cascade" | "counterfactual" | "advisories" | "insurance"
   >("overview");
   const [hardenedNodeIds, setHardenedNodeIds] = useState<string[]>([
     "S_PURI_220KV",
@@ -198,6 +199,7 @@ export function VayuConsole({ initialScenario = "fani" }: VayuConsoleProps) {
           <div className="flex items-center gap-2">
             {[
               { id: "overview", label: "Overview & Mission HUD", icon: Activity },
+              { id: "map", label: "4D Tactical GIS Map", icon: Compass },
               { id: "cascade", label: "Cascade Failure Topology", icon: Network },
               { id: "counterfactual", label: "What-If Simulator", icon: Sparkles },
               { id: "advisories", label: "6-Lang Advisories & IVR", icon: Globe },
@@ -355,6 +357,22 @@ export function VayuConsole({ initialScenario = "fani" }: VayuConsoleProps) {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Tab: 4D Tactical Geospatial Map */}
+        {activeTab === "map" && (
+          <div className="space-y-6">
+            <TacticalCommandMap
+              nodes={state.infrastructureNodes}
+              corridors={state.evacuationCorridors}
+              centerLat={state.cycloneMetadata.currentCenter.lat}
+              centerLon={state.cycloneMetadata.currentCenter.lon}
+              maxWindKmh={state.cycloneMetadata.maxSustainedWindKmh}
+              surgeCrestM={state.atmosphericData.stormSurgeCrestM}
+              stormName={state.cycloneMetadata.stormName}
+              leadTimeHours={state.cycloneMetadata.leadTimeHours}
+            />
           </div>
         )}
 
