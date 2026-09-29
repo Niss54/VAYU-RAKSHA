@@ -1,162 +1,112 @@
 @import "tailwindcss";
 
 /*
- * "Satellite console at midnight": the map is the only light source. Depth comes from four stacked dark surfaces and
- * hairlines, never drop shadows; one amber signal (the risk colour, also the logo) marks risk and the primary action.
+ * VAYU-RAKSHA Tactical Command Center Design System
+ * "Next-Gen Disaster Operations Center HUD":
+ * Deep obsidian tactical void, cyber-glass floating panels, neon telemetry pulses,
+ * animated radar sweeps, and real-time multi-agent activity indicators.
  */
 :root {
   color-scheme: dark;
-  --surface-0: #0e1012; /* void: page and map backdrop */
-  --surface-1: #15171b; /* panels */
-  --surface-2: #1c1f24; /* raised: inputs, tiles */
-  --surface-3: #23262d; /* hover */
-  --line: rgb(255 255 255 / 0.08);
-  --line-strong: rgb(255 255 255 / 0.16);
-  --glass: rgb(21 23 27 / 0.8);
-  --text-primary: #ffffff;
-  --text-secondary: #a0aaba;
-  --text-muted: #8b96aa;
-  --accent: #f28a2e; /* the amber signal */
-  --on-accent: #1d0f03;
-  --series-1: #f28a2e;
-  --member: #7fa7d9; /* ensemble member tracks: cool, recessive */
-}
+  --surface-0: #06090e; /* Tactical void */
+  --surface-1: #0c121c; /* Main command panels */
+  --surface-2: #141c2c; /* Raised instrument cards */
+  --surface-3: #1c273e; /* Hover / active states */
+  --line: rgba(0, 245, 255, 0.12); /* Cyber cyan hairline */
+  --line-strong: rgba(0, 245, 255, 0.3);
+  --glass: rgba(12, 18, 28, 0.78);
+  --glass-elevated: rgba(20, 28, 44, 0.88);
+  --text-primary: #f0f6fc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
 
-@theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Telemetry Signal Palette */
+  --neon-cyan: #00f5ff; /* Primary Brand & Active Sensor */
+  --accent: #00f5ff;
+  --warning-amber: #ff9f1c; /* Gales / Secondary Cascade */
+  --threat-crimson: #ff3366; /* Direct Hazard / Critical Failure */
+  --safe-emerald: #10b981; /* Hardened / Protected */
+  --satellite-violet: #a855f7; /* ISRO SAR & GEE radar pass */
 }
 
 body {
   background: var(--surface-0);
   color: var(--text-primary);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
 @layer components {
-  /* Floating instrument panel over the map. */
-  .glass {
+  /* Tactical Cyber Glass Panel */
+  .glass-tactical {
     background: var(--glass);
     border: 1px solid var(--line);
-    backdrop-filter: blur(16px) saturate(1.2);
+    backdrop-filter: blur(20px) saturate(1.4);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
   }
 
-  /* Tracked uppercase instrument label. */
-  .label {
+  .glass-elevated {
+    background: var(--glass-elevated);
+    border: 1px solid var(--line-strong);
+    backdrop-filter: blur(24px) saturate(1.6);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(0, 245, 255, 0.2);
+  }
+
+  /* Monospace Telemetry Readout */
+  .label-tactical {
     font-family: var(--font-geist-mono), ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: 10px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--text-muted);
   }
 
-  .readout {
+  .readout-tactical {
     font-family: var(--font-geist-mono), ui-monospace, monospace;
     font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
 
-  /* Pill segmented control. */
-  .segment {
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
-    font-family: var(--font-geist-mono), ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    transition:
-      color 150ms,
-      background-color 150ms;
+  /* Glowing Indicator Badge */
+  .glow-cyan {
+    box-shadow: 0 0 12px rgba(0, 245, 255, 0.45);
   }
-  .segment:hover {
-    color: var(--text-primary);
+  .glow-amber {
+    box-shadow: 0 0 12px rgba(255, 159, 28, 0.45);
   }
-  .segment[aria-checked="true"],
-  .segment[aria-selected="true"],
-  .segment[aria-pressed="true"] {
-    background: var(--text-primary);
-    color: var(--surface-0);
+  .glow-crimson {
+    box-shadow: 0 0 14px rgba(255, 51, 102, 0.55);
+  }
+  .glow-emerald {
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.45);
   }
 
-  .btn-primary {
-    border-radius: 999px;
-    background: var(--accent);
-    color: var(--on-accent);
-    font-weight: 600;
+  /* Radar Pulse Animation */
+  @keyframes radar-sweep {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
-  .btn-primary:hover {
-    filter: brightness(1.08);
-  }
-  .btn-ghost {
-    border-radius: 999px;
-    border: 1px solid var(--line-strong);
-    color: var(--text-primary);
-  }
-  .btn-ghost:hover {
-    background: var(--surface-3);
-  }
-}
 
-/* Live alert cards land slightly tilted and slide in as the replay moves. */
-@keyframes alert-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10px) rotate(var(--tilt, 0deg)) scale(0.97);
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.95);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.15);
+      opacity: 0.4;
+    }
+    100% {
+      transform: scale(0.95);
+      opacity: 0.8;
+    }
   }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotate(var(--tilt, 0deg));
-  }
-}
-.alert-card {
-  transform: rotate(var(--tilt, 0deg));
-  animation: alert-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .alert-card {
-    animation: none;
-  }
-}
 
-/* Timeline scrubber: hairline track, amber thumb. */
-input[type="range"].scrub {
-  appearance: none;
-  height: 20px;
-  background: transparent;
-}
-input[type="range"].scrub::-webkit-slider-runnable-track {
-  height: 2px;
-  background: var(--line-strong);
-}
-input[type="range"].scrub::-moz-range-track {
-  height: 2px;
-  background: var(--line-strong);
-}
-input[type="range"].scrub::-webkit-slider-thumb {
-  appearance: none;
-  margin-top: -7px;
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px rgb(242 138 46 / 0.25);
-}
-input[type="range"].scrub::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px rgb(242 138 46 / 0.25);
-}
-
-/* deck.gl tooltip, restyled as an instrument readout. */
-.deck-tooltip {
-  background: var(--surface-1) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--line-strong);
-  border-radius: 10px;
-  font-size: 12px !important;
-  white-space: pre-line;
+  .animate-pulse-slow {
+    animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
 }
