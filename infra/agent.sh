@@ -2,10 +2,10 @@
 # Provision what the console's Gemini agent needs: Vertex AI and the Firestore database that holds the
 # append-only advisory audit log. Idempotent.
 #
-# Usage: PROJECT=argmax-cyclone-2026 REGION=asia-south1 infra/agent.sh
+# Usage: PROJECT=vayu-raksha-2026 REGION=asia-south1 infra/agent.sh
 set -euo pipefail
 
-PROJECT="${PROJECT:-argmax-cyclone-2026}"
+PROJECT="${PROJECT:-vayu-raksha-2026}"
 REGION="${REGION:-asia-south1}"
 GCLOUD=(gcloud --project "${PROJECT}" --quiet)
 

@@ -10,7 +10,7 @@ import { type ExternalAccountClientOptions, ExternalAccountClient } from "google
 
 import type { Advisory, AdvisorySummary } from "@/lib/advisory";
 
-const PROJECT = process.env.GOOGLE_CLOUD_PROJECT ?? "argmax-cyclone-2026";
+const PROJECT = process.env.GOOGLE_CLOUD_PROJECT ?? "vayu-raksha-2026";
 const PROVIDER = process.env.GCP_WORKLOAD_IDENTITY_PROVIDER; // projects/<number>/locations/global/workloadIdentityPools/<pool>/providers/<provider>
 const SERVICE_ACCOUNT = process.env.GCP_SERVICE_ACCOUNT_EMAIL;
 

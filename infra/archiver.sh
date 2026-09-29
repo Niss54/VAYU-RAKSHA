@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# Deploy the ShadowCast feed archiver: archive bucket, service account, Cloud Run Job and a 6-hourly
+# Deploy the VAYU-RAKSHA feed archiver: archive bucket, service account, Cloud Run Job and a 6-hourly
 # Cloud Scheduler trigger. Idempotent: re-running updates the job image and schedule in place.
 #
-# Usage: PROJECT=argmax-cyclone-2026 REGION=asia-south1 infra/archiver.sh [--run]
+# Usage: PROJECT=vayu-raksha-2026 REGION=asia-south1 infra/archiver.sh [--run]
 #   --run   execute the job once after deploying and wait for it to finish.
 set -euo pipefail
 
-PROJECT="${PROJECT:-argmax-cyclone-2026}"
+PROJECT="${PROJECT:-vayu-raksha-2026}"
 REGION="${REGION:-asia-south1}"
 BUCKET="${BUCKET:-${PROJECT}-archive}"
-JOB="${JOB:-shadowcast-archiver}"
+JOB="${JOB:-vayu-raksha-archiver}"
 SCHEDULE="${SCHEDULE:-15 */6 * * *}"
-SA_NAME="shadowcast-archiver"
+SA_NAME="vayu-raksha-archiver"
 SA="${SA_NAME}@${PROJECT}.iam.gserviceaccount.com"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 GCLOUD=(gcloud --project "${PROJECT}" --quiet)

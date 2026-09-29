@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# Deploy the ShadowCast geo API: scenario bucket, read-only service account and Cloud Run service.
+# Deploy the VAYU-RAKSHA geo API: scenario bucket, read-only service account and Cloud Run service.
 # Idempotent. The build writes artifacts straight to the bucket; the service loads them at startup.
 #
-# Usage: PROJECT=argmax-cyclone-2026 REGION=asia-south1 infra/geo.sh
-# Build artifacts with:  cd services/geo && uv run --all-extras python -m shadowcast_geo.build
+# Usage: PROJECT=vayu-raksha-2026 REGION=asia-south1 infra/geo.sh
+# Build artifacts with:  cd services/geo && python -m vayu_raksha.api.server
 set -euo pipefail
 
-PROJECT="${PROJECT:-argmax-cyclone-2026}"
+PROJECT="${PROJECT:-vayu-raksha-2026}"
 REGION="${REGION:-asia-south1}"
 BUCKET="${BUCKET:-${PROJECT}-scenarios}"
 ARCHIVE_BUCKET="${ARCHIVE_BUCKET:-${PROJECT}-archive}"
-SERVICE="${SERVICE:-shadowcast-geo}"
+SERVICE="${SERVICE:-vayu-raksha-geo}"
 ALLOWED_ORIGINS="${ALLOWED_ORIGINS:-*}"
-SA_NAME="shadowcast-geo"
+SA_NAME="vayu-raksha-geo"
 SA="${SA_NAME}@${PROJECT}.iam.gserviceaccount.com"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 GCLOUD=(gcloud --project "${PROJECT}" --quiet)

@@ -3,15 +3,15 @@
 # Workload Identity Federation trusts Vercel's OIDC tokens for one Vercel project, which may impersonate a
 # least-privilege service account. Idempotent. Prints the environment variables to set on Vercel.
 #
-# Usage: VERCEL_TEAM=<team-slug> [VERCEL_PROJECT=shadowcast] PROJECT=argmax-cyclone-2026 infra/web.sh
+# Usage: VERCEL_TEAM=<team-slug> [VERCEL_PROJECT=vayu-raksha] PROJECT=vayu-raksha-2026 infra/web.sh
 set -euo pipefail
 
-PROJECT="${PROJECT:-argmax-cyclone-2026}"
+PROJECT="${PROJECT:-vayu-raksha-2026}"
 VERCEL_TEAM="${VERCEL_TEAM:?set VERCEL_TEAM to the Vercel team slug}"
-VERCEL_PROJECT="${VERCEL_PROJECT:-shadowcast}"
+VERCEL_PROJECT="${VERCEL_PROJECT:-vayu-raksha}"
 POOL="vercel"
 PROVIDER="vercel"
-SA_NAME="shadowcast-web"
+SA_NAME="vayu-raksha-web"
 SA="${SA_NAME}@${PROJECT}.iam.gserviceaccount.com"
 GCLOUD=(gcloud --project "${PROJECT}" --quiet)
 NUMBER="$("${GCLOUD[@]}" projects describe "${PROJECT}" --format='value(projectNumber)')"
@@ -22,7 +22,7 @@ echo "==> Enabling APIs"
 
 echo "==> Service account ${SA}"
 if ! "${GCLOUD[@]}" iam service-accounts describe "${SA}" >/dev/null 2>&1; then
-  "${GCLOUD[@]}" iam service-accounts create "${SA_NAME}" --display-name="ShadowCast console (Vercel)"
+  "${GCLOUD[@]}" iam service-accounts create "${SA_NAME}" --display-name="VAYU-RAKSHA console (Vercel)"
 fi
 # Least privilege: call Gemini, and read/write the advisory audit log.
 for role in roles/aiplatform.user roles/datastore.user; do

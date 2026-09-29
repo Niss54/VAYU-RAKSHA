@@ -45,11 +45,11 @@
       <circle cx="32.0" cy="32.0" r="2.6" fill="none" stroke="#FFFFFF" stroke-width="1.5"/>
     </g>
     <!-- text -->
-    <text x="340" y="112" fill="#F28A2E" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="15" letter-spacing="3.5">IMPACT FORECAST &#183; PROVEN BY SATELLITE</text>
-    <text x="336" y="186" fill="#FFFFFF" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-1.5">ShadowCast</text>
+    <text x="340" y="112" fill="#F28A2E" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="15" letter-spacing="3.5">ANTICIPATORY CYCLONE &amp; INFRASTRUCTURE CASCADE INTELLIGENCE</text>
+    <text x="336" y="186" fill="#FFFFFF" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="72" font-weight="700" letter-spacing="-1.5">VAYU-RAKSHA</text>
     <text x="340" y="236" fill="#B9BCC2" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="25">Forecasts say where a cyclone goes.</text>
-    <text x="340" y="272" fill="#FFFFFF" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="25">ShadowCast says <tspan fill="#F28A2E" font-weight="600">what it will break</tspan> &#8212; and proves it by satellite.</text>
+    <text x="340" y="272" fill="#FFFFFF" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="25">VAYU-RAKSHA solves <tspan fill="#00E5FF" font-weight="600">what will break</tspan> &#8212; and proves it by satellite radar.</text>
     <rect x="340" y="304" width="220" height="2" fill="url(#fade)" transform="rotate(180 450 305)"/>
-    <text x="340" y="330" fill="#6F737B" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12.5" letter-spacing="2">BUILD WITH AI: CODE FOR COMMUNITIES &#183; TRACK 5 &#183; CYCLONE IMPACT</text>
+    <text x="340" y="330" fill="#6F737B" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12.5" letter-spacing="2">BUILD WITH AI: CODE FOR COMMUNITIES &#183; TRACK 5 &#183; TEAM SYNTRIX</text>
   </g>
 </svg>
