@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { type AdvisoryNotice } from "@/lib/vayu-engine";
-import { AlertCircle, Download, FileText, Globe2, Pause, Play, Volume2, Waves } from "lucide-react";
+import { AlertCircle, Download, FileText, Globe2, Loader2, Pause, Play, Volume2, Waves, Sparkles } from "lucide-react";
 
 interface MultilingualAdvisoryHubProps {
   advisories: AdvisoryNotice[];
@@ -11,24 +11,90 @@ interface MultilingualAdvisoryHubProps {
 export function MultilingualAdvisoryHub({ advisories }: MultilingualAdvisoryHubProps) {
   const [activeLang, setActiveLang] = useState<string>("or"); // Default to Odia for coastal Odisha
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isLoadingVoice, setIsLoadingVoice] = useState(false);
+  const [voiceProvider, setVoiceProvider] = useState<"sarvam" | "browser" | null>(null);
 
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentAdvisory = advisories.find((a) => a.languageCode === activeLang) || advisories[0];
 
-  const handleToggleVoice = () => {
-    setIsPlayingAudio((prev) => !prev);
-    // Real browser speech synthesis if available
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      if (!isPlayingAudio) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(currentAdvisory.ivrSpeechScript);
-        utterance.rate = 0.95;
-        utterance.onend = () => setIsPlayingAudio(false);
-        utterance.onerror = () => setIsPlayingAudio(false);
-        window.speechSynthesis.speak(utterance);
-      } else {
-        window.speechSynthesis.cancel();
-      }
+  const stopAllAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsPlayingAudio(false);
+    setIsLoadingVoice(false);
+  };
+
+  const fallbackToBrowserSpeech = () => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(currentAdvisory.ivrSpeechScript);
+      const BCP47_MAP: Record<string, string> = {
+        or: "or-IN",
+        hi: "hi-IN",
+        bn: "bn-IN",
+        te: "te-IN",
+        ta: "ta-IN",
+        en: "en-IN",
+      };
+      utterance.lang = BCP47_MAP[activeLang] || "en-IN";
+      utterance.rate = 0.95;
+      utterance.onend = () => setIsPlayingAudio(false);
+      utterance.onerror = () => setIsPlayingAudio(false);
+      window.speechSynthesis.speak(utterance);
+      setVoiceProvider("browser");
+      setIsPlayingAudio(true);
+    }
+  };
+
+  const handleToggleVoice = async () => {
+    if (isPlayingAudio || isLoadingVoice) {
+      stopAllAudio();
+      return;
+    }
+
+    setIsLoadingVoice(true);
+    setVoiceProvider(null);
+
+    try {
+      // 1. First attempt high-fidelity Sarvam AI Voice
+      const res = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: currentAdvisory.ivrSpeechScript,
+          languageCode: activeLang,
+          speaker: "meera",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success && data.audioBase64) {
+        const audio = new Audio("data:audio/wav;base64," + data.audioBase64);
+        audioRef.current = audio;
+        audio.onended = () => setIsPlayingAudio(false);
+        audio.onerror = () => {
+          setIsPlayingAudio(false);
+          fallbackToBrowserSpeech();
+        };
+        await audio.play();
+        setVoiceProvider("sarvam");
+        setIsPlayingAudio(true);
+        setIsLoadingVoice(false);
+        return;
+      }
+    } catch (err) {
+      console.warn("[VAYU-RAKSHA] Sarvam AI TTS fetch failed, switching to browser speech:", err);
+    }
+
+    // 2. Fallback to browser speech synthesis
+    fallbackToBrowserSpeech();
+    setIsLoadingVoice(false);
   };
 
   const handleDownloadCAP = () => {
@@ -89,10 +155,7 @@ export function MultilingualAdvisoryHub({ advisories }: MultilingualAdvisoryHubP
                 key={adv.languageCode}
                 onClick={() => {
                   setActiveLang(adv.languageCode);
-                  if (isPlayingAudio) {
-                    setIsPlayingAudio(false);
-                    if (typeof window !== "undefined") window.speechSynthesis?.cancel();
-                  }
+                  stopAllAudio();
                 }}
                 className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
                   isActive
@@ -156,18 +219,31 @@ export function MultilingualAdvisoryHub({ advisories }: MultilingualAdvisoryHubP
           </div>
         )}
 
-        {/* IVR Voice Audio Broadcast Simulator Bar */}
+        {/* IVR Voice Audio Broadcast Simulator Bar with Sarvam AI */}
         <div className="p-3 rounded-xl bg-slate-900/90 border border-cyan-500/20 flex flex-col sm:flex-row items-center justify-between gap-3 mt-3">
           <div className="flex items-center gap-2.5 text-xs">
             <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">
               <Volume2 className="w-4 h-4" />
             </div>
             <div>
-              <div className="font-mono font-bold text-slate-200">
-                Automated IVR Community Voice Broadcast
+              <div className="flex items-center gap-2">
+                <span className="font-mono font-bold text-slate-200">
+                  Automated IVR Community Voice Broadcast
+                </span>
+                {voiceProvider === "sarvam" ? (
+                  <span className="px-2 py-0.2 rounded text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    SARVAM AI 🇮🇳
+                  </span>
+                ) : (
+                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
+                    <Sparkles className="w-2.5 h-2.5 text-cyan-300" />
+                    SARVAM AI READY
+                  </span>
+                )}
               </div>
               <div className="text-[11px] text-slate-400">
-                Simulate broadcast audio stream over rural mobile networks
+                Natural Indian accent speech synthesis via Sarvam AI (Bulbul:v1) &amp; offline fallback
               </div>
             </div>
           </div>
@@ -184,13 +260,18 @@ export function MultilingualAdvisoryHub({ advisories }: MultilingualAdvisoryHubP
 
             <button
               onClick={handleToggleVoice}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer transition-all ${
+              disabled={isLoadingVoice}
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer transition-all disabled:opacity-60 ${
                 isPlayingAudio
                   ? "bg-rose-500 text-white hover:bg-rose-600"
                   : "bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-md shadow-cyan-500/30"
               }`}
             >
-              {isPlayingAudio ? (
+              {isLoadingVoice ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" /> Synthesizing Voice...
+                </>
+              ) : isPlayingAudio ? (
                 <>
                   <Pause className="w-3.5 h-3.5" /> Stop Broadcast
                 </>
@@ -206,3 +287,4 @@ export function MultilingualAdvisoryHub({ advisories }: MultilingualAdvisoryHubP
     </div>
   );
 }
+
