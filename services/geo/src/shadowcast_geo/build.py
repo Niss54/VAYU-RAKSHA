@@ -438,6 +438,82 @@ def build_scenario(
         truth[["asset_id", "loss_pct"]].rename(columns={"loss_pct": "observed_loss_pct"}), on="asset_id", how="left"
     )
     ranked = rank_assets(assets, model, scenario.landfall, reference_bands)
+
+    # ─── VAYU-RAKSHA: CASCADE FAILURE & ISRO ANALYSIS ────────────────────────
+    from shadowcast_geo.cascade import run_cascade_analysis
+    from shadowcast_geo.climada_curves import compare_models
+    from shadowcast_geo.counterfactual import optimize_hardening_actions
+    from shadowcast_geo.mosdac import build_isro_data_citation, fetch_cyclone_intensity
+    from shadowcast_geo.risat_sar import compare_surge_vs_sar
+
+    logger.info("Running cascade failure analysis for %s", scenario.id)
+    try:
+        cascade_result = run_cascade_analysis(ranked)
+        # Inject cascade_contribution back into ranked for scoring
+        ranked = ranked.merge(
+            cascade_result.cascade_scores.rename("cascade_contribution").reset_index(),
+            left_on="asset_id",
+            right_on="index",
+            how="left",
+        )
+        ranked["cascade_contribution"] = ranked["cascade_contribution"].fillna(0)
+
+        # Re-rank with cascade scores
+        ranked = rank_assets(ranked, model, scenario.landfall, reference_bands)
+
+        hardening_actions = optimize_hardening_actions(ranked, top_n_actions=10)
+        action_dicts = [vars(a) for a in hardening_actions]
+
+        cascade_dict = {
+            "top_chains": cascade_result.cascade_chains,
+            "top_actions": action_dicts,
+            "population_at_cascade_risk": cascade_result.population_at_cascade_risk,
+            "cascade_edges": cascade_result.graph.number_of_edges(),
+            "cascade_nodes": cascade_result.graph.number_of_nodes(),
+        }
+
+        # ISRO MOSDAC data
+        mosdac = fetch_cyclone_intensity(scenario.storm)
+        isro_dict = {
+            "mosdac_available": mosdac is not None,
+            "insat3ds_intensity_kt": mosdac.dvt_intensity_kt if mosdac else None,
+            "ri_risk": mosdac.rapid_intensification_risk if mosdac else False,
+            "citation": build_isro_data_citation(),
+        }
+
+        # SAR flood validation
+        flooded_assets = ranked[ranked["flood_m"].fillna(0) >= 0.3].to_dict("records")
+        sar_val = compare_surge_vs_sar(
+            scenario.id,
+            flooded_assets,
+            scenario.truth_post[0],
+            scenario.truth_post[1],
+            scenario.region.bbox,
+        )
+        sar_dict = vars(sar_val)
+
+        # CLIMADA comparison
+        wind_arr = ranked["peak_wind_kt"].to_numpy(dtype=float)
+        viirs_p_arr = ranked["p_outage"].to_numpy(dtype=float)
+        climada_comparison = compare_models(wind_arr, viirs_p_arr)
+        climada_comparison.pop("climada_p", None)
+        climada_comparison.pop("viirs_p", None)
+        climada_comparison.pop("divergence_indices", None)
+
+        store.write_json(f"scenarios/{scenario.id}/cascade.json", cascade_dict)
+        store.write_json(f"scenarios/{scenario.id}/isro.json", isro_dict)
+        store.write_json(f"scenarios/{scenario.id}/sar_validation.json", sar_dict)
+        store.write_json(f"scenarios/{scenario.id}/climada.json", climada_comparison)
+        logger.info(
+            "Cascade: %d chains, %d hardening actions, pop at cascade risk: %.0f",
+            len(cascade_result.cascade_chains),
+            len(hardening_actions),
+            cascade_result.population_at_cascade_risk,
+        )
+    except Exception as exc:
+        logger.warning("Cascade analysis failed for %s: %s — continuing without it", scenario.id, exc)
+        store.write_json(f"scenarios/{scenario.id}/cascade.json", {})
+
     backtest = truth.merge(ranked[["asset_id", "name", "p_outage"]], on="asset_id")
     forecasts: list[dict[str, Any]] = []
     if scenario.forecasts:

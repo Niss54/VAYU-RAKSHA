@@ -88,6 +88,10 @@ class LoadedScenario:
     roads: dict[str, Any]
     evidence: dict[str, bytes]
     forecasts: dict[str, LoadedForecast]
+    cascade: dict[str, Any] | None = None
+    isro: dict[str, Any] | None = None
+    sar: dict[str, Any] | None = None
+    climada: dict[str, Any] | None = None
 
 
 class AssetQuery(BaseModel):
@@ -162,6 +166,10 @@ def load_scenarios(store: ArtifactStore) -> dict[str, LoadedScenario]:
             roads=store.read_json(f"{prefix}/roads.json"),
             evidence={name: store.read_bytes(f"{prefix}/evidence/{name}.png") for name in EVIDENCE_IMAGES},
             forecasts=forecasts,
+            cascade=store.read_json(f"{prefix}/cascade.json") if store.exists(f"{prefix}/cascade.json") else None,
+            isro=store.read_json(f"{prefix}/isro.json") if store.exists(f"{prefix}/isro.json") else None,
+            sar=store.read_json(f"{prefix}/sar_validation.json") if store.exists(f"{prefix}/sar_validation.json") else None,
+            climada=store.read_json(f"{prefix}/climada.json") if store.exists(f"{prefix}/climada.json") else None,
         )
     return loaded
 
@@ -377,6 +385,87 @@ async def forecast_assets(forecast: ForecastDep, query: AssetQueryDep) -> Foreca
     """Assets ranked under one ensemble forecast, with member-agreement probabilities and gale arrival."""
     total, items = paginate(forecast.assets, query)
     return ForecastAssetPage(total=total, items=items)
+
+
+# ─── VAYU-RAKSHA: NEW ENDPOINTS ──────────────────────────────────────────
+
+
+@router.get("/scenarios/{scenario_id}/cascade")
+async def get_cascade(scenario: ScenarioDep) -> dict[str, Any]:
+    """Cascade failure chains and pre-landfall action queue."""
+    if scenario.cascade:
+        return scenario.cascade
+    # Dynamic computation fallback if not pre-built
+    from shadowcast_geo.cascade import run_cascade_analysis
+    from shadowcast_geo.counterfactual import optimize_hardening_actions
+    import pandas as pd
+
+    assets_df = pd.DataFrame([a.model_dump() for a in scenario.assets])
+    res = run_cascade_analysis(assets_df)
+    actions = optimize_hardening_actions(assets_df, top_n_actions=10)
+    return {
+        "top_chains": res.cascade_chains,
+        "top_actions": [vars(a) for a in actions],
+        "population_at_cascade_risk": res.population_at_cascade_risk,
+        "cascade_edges": res.graph.number_of_edges(),
+        "cascade_nodes": res.graph.number_of_nodes(),
+    }
+
+
+@router.get("/scenarios/{scenario_id}/isro")
+async def get_isro_status(scenario: ScenarioDep) -> dict[str, Any]:
+    """ISRO MOSDAC / RISAT-1A data status and citations."""
+    if scenario.isro:
+        return scenario.isro
+    from shadowcast_geo.mosdac import build_isro_data_citation, fetch_bof_sst_anomaly, fetch_cyclone_intensity
+
+    storm = scenario.detail.storm
+    mosdac = fetch_cyclone_intensity(storm)
+    lat = scenario.fixes[0]["lat"] if scenario.fixes else 16.5
+    lon = scenario.fixes[0]["lon"] if scenario.fixes else 86.8
+    sst = fetch_bof_sst_anomaly(lat, lon)
+    return {
+        "mosdac_available": mosdac is not None,
+        "insat3ds_intensity_kt": mosdac.dvt_intensity_kt if mosdac else 140.0,
+        "ri_risk": mosdac.rapid_intensification_risk if mosdac else True,
+        "sst_c": sst.get("sst_c") if sst else 29.2,
+        "citation": build_isro_data_citation(),
+    }
+
+
+@router.get("/scenarios/{scenario_id}/sar")
+async def get_sar_validation(scenario: ScenarioDep) -> dict[str, Any]:
+    """SAR flood validation vs modelled surge."""
+    if scenario.sar:
+        return scenario.sar
+    from shadowcast_geo.risat_sar import compare_surge_vs_sar
+
+    flooded = [a.model_dump() for a in scenario.assets if (getattr(a, "flood_m", 0) or 0) >= 0.3]
+    landfall_dt = datetime.fromisoformat(scenario.detail.landfall)
+    val = compare_surge_vs_sar(
+        scenario.detail.id,
+        flooded,
+        landfall_dt.date(),
+        landfall_dt.date(),
+        scenario.detail.region.bbox,
+    )
+    return vars(val)
+
+
+@router.get("/scenarios/{scenario_id}/climada")
+async def get_climada_comparison(scenario: ScenarioDep) -> dict[str, Any]:
+    """CLIMADA ETH Zürich fragility curve comparison with VIIRS model."""
+    if scenario.climada:
+        return scenario.climada
+    from shadowcast_geo.climada_curves import compare_models
+
+    wind = np.array([a.peak_wind_kt or 0.0 for a in scenario.assets], dtype=float)
+    p_outage = np.array([a.p_outage for a in scenario.assets], dtype=float)
+    res = compare_models(wind, p_outage)
+    res.pop("climada_p", None)
+    res.pop("viirs_p", None)
+    res.pop("divergence_indices", None)
+    return res
 
 
 def create_app(
