@@ -8,12 +8,14 @@ import test_cascade
 import test_counterfactual
 import test_mosdac
 import test_climada_curves
+import test_agents
 
 modules = [
     ("test_cascade", test_cascade),
     ("test_counterfactual", test_counterfactual),
     ("test_mosdac", test_mosdac),
     ("test_climada_curves", test_climada_curves),
+    ("test_agents", test_agents),
 ]
 
 total = 0
