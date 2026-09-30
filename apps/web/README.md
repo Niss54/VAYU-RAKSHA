@@ -58,3 +58,29 @@ DD_ENV=development
   - CLI Test: `node -r dotenv/config scripts/test-datadog.js dotenv_config_path=.env.local`
 - **Fail-Safe**: Non-blocking and resilient — if Datadog is unreachable or credentials are missing, the application runs normally without interruption.
 
+## Cloudinary File Storage
+
+VAYU-RAKSHA uses Cloudinary for unified, server-side media and document asset storage, completely replacing legacy AWS S3 and Cloudflare R2 implementations.
+
+### Configuration (`.env.local` / `.env`):
+```env
+STORAGE_PROVIDER=cloudinary
+CLOUDINARY_CLOUD_NAME=x9sncqcz
+CLOUDINARY_API_KEY=145764614276676
+CLOUDINARY_API_SECRET=CLOUDINARY_URL=cloudinary://145764614276676:ey_K80B4FsA-4VGG_ICYCQl9hMY@x9sncqcz
+MAX_FILE_SIZE_MB=10
+ALLOWED_FILE_TYPES=image/jpeg,image/png,image/webp,application/pdf,audio/wav,audio/webm,audio/mp3,audio/mpeg,audio/ogg
+```
+
+### Features:
+- **Server-Side Security**: All credentials (`CLOUDINARY_API_SECRET`) are read strictly server-side and never exposed to client-side code.
+- **Unified Upload Endpoint (`/api/upload`)**:
+  - `POST /api/upload`: Accepts `multipart/form-data` or JSON base64 payloads; validates MIME type and file size; returns HTTPS `secure_url`.
+  - `GET /api/upload?public_id=...`: Retrieves asset metadata securely from Cloudinary.
+  - `DELETE /api/upload`: Deletes uploaded assets by public ID.
+- **Client Helper**: `uploadAttachment(blob, filename)` from `@/lib/media`.
+- **Supported Formats**: Images (JPEG, PNG, WebP, GIF, SVG), Documents (PDF), and Audio voice notes (WAV, WebM, MP3, OGG).
+- **Diagnostics & Verification**:
+  - CLI Test: `node -r dotenv/config scripts/test-cloudinary.js dotenv_config_path=.env.local`
+  - Automated Vitest suite: `npm test`
+

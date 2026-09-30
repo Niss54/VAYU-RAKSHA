@@ -63,3 +63,46 @@ describe("recordingToWavUrl", () => {
     vi.unstubAllGlobals();
   });
 });
+
+describe("uploadAttachment", () => {
+  it("posts file to /api/upload and returns secure_url payload", async () => {
+    const mockResponse = {
+      ok: true,
+      status: 200,
+      json: () =>
+        Promise.resolve({
+          success: true,
+          file: {
+            url: "https://res.cloudinary.com/test-cloud/image/upload/v1/test.png",
+            secure_url: "https://res.cloudinary.com/test-cloud/image/upload/v1/test.png",
+            public_id: "test",
+          },
+        }),
+    };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(mockResponse));
+
+    const { uploadAttachment } = await import("./media");
+    const blob = new Blob(["dummy content"], { type: "image/png" });
+    const res = await uploadAttachment(blob, "photo.png");
+
+    expect(res.secure_url).toBe("https://res.cloudinary.com/test-cloud/image/upload/v1/test.png");
+    expect(res.public_id).toBe("test");
+    vi.unstubAllGlobals();
+  });
+
+  it("throws error when server responds with error status", async () => {
+    const mockResponse = {
+      ok: false,
+      status: 400,
+      json: () => Promise.resolve({ error: "Unsupported file type" }),
+    };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(mockResponse));
+
+    const { uploadAttachment } = await import("./media");
+    const blob = new Blob(["dummy"], { type: "text/plain" });
+
+    await expect(uploadAttachment(blob, "bad.txt")).rejects.toThrow("Unsupported file type");
+    vi.unstubAllGlobals();
+  });
+});
+

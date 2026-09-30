@@ -13,6 +13,7 @@ export default defineConfig({
         "src/lib/alerts.ts",
         "src/lib/brief.ts",
         "src/lib/media.ts",
+        "src/lib/storage.ts",
       ],
       thresholds: { lines: 90, branches: 90 },
     },

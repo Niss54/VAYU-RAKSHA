@@ -1,4 +1,14 @@
 {
+  "name": "vayu-raksha",
+  "private": true,
+  "scripts": {
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up",
+    "docker:prod": "docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d"
+  },
   "dependencies": {
     "@neon/config": "^1.8.2",
     "@neon/env": "^1.4.7"

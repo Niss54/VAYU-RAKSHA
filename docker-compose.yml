@@ -1,0 +1,141 @@
+# ==============================================================================
+# 🌪️ VAYU-RAKSHA (वायु रक्षा) — Docker Compose Orchestration
+# Anticipatory Cyclone & Infrastructure Cascade Intelligence Platform
+# ==============================================================================
+
+services:
+  # ----------------------------------------------------------------------------
+  # 1. Web Application Console (Next.js 16 + React 19 + AI SDK + Cloudinary)
+  # ----------------------------------------------------------------------------
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: vayu_raksha_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - GEO_API_URL=http://geo:8000
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-vayu_raksha_db}?sslmode=disable
+      - REDIS_URL=redis://redis:6379
+      - STORAGE_PROVIDER=cloudinary
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME:-x9sncqcz}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY:-145764614276676}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID:-rzp_test_vayuRaksha2026}
+      - NEXT_PUBLIC_RAZORPAY_KEY_ID=${NEXT_PUBLIC_RAZORPAY_KEY_ID:-rzp_test_vayuRaksha2026}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET:-}
+      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET:-}
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - EMAIL_FROM_NAME=${EMAIL_FROM_NAME:-VAYU-RAKSHA Emergency Operations}
+      - EMAIL_FROM_ADDRESS=${EMAIL_FROM_ADDRESS:-onboarding@resend.dev}
+      - DD_API_KEY=${DD_API_KEY:-}
+      - DD_APP_KEY=${DD_APP_KEY:-}
+      - DD_SERVICE_NAME=VAYU-RAKSHA
+      - DD_SITE=${DD_SITE:-datadoghq.com}
+      - DD_ENV=${DD_ENV:-development}
+      - TOOL_APPROVAL_SECRET=${TOOL_APPROVAL_SECRET:-vayu_raksha_sec_token_prod_2026_demo}
+    env_file:
+      - path: ./apps/web/.env.local
+        required: false
+      - path: ./.env
+        required: false
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      geo:
+        condition: service_started
+    networks:
+      - vayu-network
+
+  # ----------------------------------------------------------------------------
+  # 2. Python Geospatial & Cascade Engine (FastAPI + LangGraph + NetworkX)
+  # ----------------------------------------------------------------------------
+  geo:
+    build:
+      context: ./services/geo
+      dockerfile: Dockerfile
+    container_name: vayu_raksha_geo
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+    networks:
+      - vayu-network
+
+  # ----------------------------------------------------------------------------
+  # 3. PostgreSQL Database (Relational Store for Situations, Audits, Orders)
+  # ----------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: vayu_raksha_postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME:-vayu_raksha_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-vayu_raksha_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vayu-network
+
+  # ----------------------------------------------------------------------------
+  # 4. Redis Cache & Task Queue
+  # ----------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: vayu_raksha_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vayu-network
+
+  # ----------------------------------------------------------------------------
+  # 5. ShadowCast Archiver (Optional Snapshot & Ingestion Worker)
+  # ----------------------------------------------------------------------------
+  archiver:
+    build:
+      context: ./services/archiver
+      dockerfile: Dockerfile
+    container_name: vayu_raksha_archiver
+    profiles:
+      - archiver
+      - full
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - vayu-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  vayu-network:
+    driver: bridge

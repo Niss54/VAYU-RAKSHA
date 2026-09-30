@@ -73,3 +73,30 @@ export function blobToDataUrl(blob: Blob): Promise<string> {
     reader.readAsDataURL(blob);
   });
 }
+
+/**
+ * Upload an attachment file or blob to Cloudinary via the server-side /api/upload endpoint.
+ * Keeps CLOUDINARY_API_SECRET protected on the server and returns the Cloudinary secure_url.
+ */
+export async function uploadAttachment(
+  file: Blob | File,
+  filename?: string,
+): Promise<{ url: string; secure_url: string; public_id: string }> {
+  const formData = new FormData();
+  const name = filename || (file instanceof File ? file.name : "attachment");
+  formData.append("file", file, name);
+
+  const response = await fetch("/api/upload", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.error || `Upload failed with HTTP ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.file || { url: data.secure_url, secure_url: data.secure_url, public_id: data.public_id };
+}
+

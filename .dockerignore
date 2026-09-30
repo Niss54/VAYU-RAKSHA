@@ -1,0 +1,42 @@
+# Git
+.git
+.github
+
+# Node
+node_modules
+**/node_modules
+.next
+**/.next
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.turbo
+
+# Python
+__pycache__
+**/*.py[cod]
+.venv
+**/.venv
+.pytest_cache
+**/.pytest_cache
+.ruff_cache
+**/.ruff_cache
+.coverage
+coverage.xml
+htmlcov/
+archive/
+services/geo/artifacts/
+.cache
+
+# IDE
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Env secrets
+.env.local
+**/.env.local
+*.pem
+*-key.json

@@ -1,0 +1,63 @@
+# ==============================================================================
+# 🌪️ VAYU-RAKSHA — Docker Compose Production Hardening
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# ==============================================================================
+
+services:
+  web:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  geo:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  postgres:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 1024M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  redis:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
