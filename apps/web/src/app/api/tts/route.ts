@@ -25,10 +25,18 @@ export async function GET() {
   });
 }
 
+const VALID_SPEAKERS = new Set([
+  "kavya", "aditya", "priya", "ritu", "ashutosh", "neha", "rahul", "pooja", "rohan", "simran",
+  "amit", "dev", "ishita", "shreya", "ratan", "varun", "manan", "sumit", "roopa", "kabir",
+  "aayan", "shubh", "advait", "anand", "tanya", "tarun", "sunny", "mani", "gokul", "vijay",
+  "shruti", "suhani", "mohit", "kavitha", "rehan", "soham", "rupali"
+]);
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { text, languageCode = "hi", speaker = "meera" } = body;
+    const { text, languageCode = "hi", speaker = "kavya" } = body;
+    const chosenSpeaker = VALID_SPEAKERS.has(speaker) ? speaker : "kavya";
 
     if (!text || typeof text !== "string") {
       return NextResponse.json({ error: "Missing or invalid 'text' field" }, { status: 400 });
@@ -65,13 +73,13 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         inputs: [cleanText],
         target_language_code: targetLang,
-        speaker: speaker,
+        speaker: chosenSpeaker,
         pitch: 0,
         pace: 1.0,
         loudness: 1.5,
         speech_sample_rate: 22050,
         enable_preprocessing: true,
-        model: "bulbul:v1",
+        model: "bulbul:v3",
       }),
     });
 
