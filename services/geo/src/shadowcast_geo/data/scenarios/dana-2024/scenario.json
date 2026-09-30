@@ -1,0 +1,1012 @@
+{
+  "id": "dana-2024",
+  "storm": "Dana",
+  "season": 2024,
+  "region": {
+    "id": "odisha-coast",
+    "name": "Odisha coast (Ganjam to Balasore)",
+    "bbox": [
+      19.0,
+      84.4,
+      21.7,
+      87.6
+    ]
+  },
+  "landfall": "2024-10-24T20:00:00Z",
+  "peak_vmax_kt": 65.0,
+  "track_source": "IBTrACS best track (JTWC intensity and wind radii)",
+  "asset_counts": {
+    "health_centre": 796,
+    "cyclone_shelter": 765,
+    "hospital": 671,
+    "clinic": 358,
+    "substation": 264,
+    "school": 247,
+    "water_works": 105,
+    "police": 65,
+    "power_plant": 38,
+    "fire_station": 16
+  },
+  "model": {
+    "intercept": -26.847865888829688,
+    "slope": 0.2515101025609214,
+    "trained_on": "fani-2019",
+    "n": 200,
+    "auc": 0.9729020979020979,
+    "brier": 0.04885342409361702
+  },
+  "skill": {
+    "n": 252.0,
+    "observed_outage_rate": 0.01984126984126984,
+    "auc": 0.3230769230769231,
+    "brier": 0.0198412626148174,
+    "spearman": -0.19811737428227988,
+    "out_of_sample": true
+  },
+  "loss_by_band": [
+    {
+      "low_kt": 0.0,
+      "high_kt": 60.0,
+      "n": 242.0,
+      "p25": 10.736254741017955,
+      "median": 20.717500130192324,
+      "p75": 30.991881250942264
+    },
+    {
+      "low_kt": 60.0,
+      "high_kt": 80.0,
+      "n": 10.0,
+      "p25": 7.077189461783112,
+      "median": 17.281924955379687,
+      "p75": 26.127490531888967
+    }
+  ],
+  "surge": {
+    "peak_m": 2.77,
+    "lat": 21.142,
+    "lon": 86.825,
+    "time": "2024-10-24T19:45:00Z",
+    "coast_points": 239,
+    "flooded_sites": 0,
+    "method": "1D wind setup over ETOPO1 shelf transects plus inverse barometer; no tide, waves or rivers",
+    "observed": {
+      "place": "Kendrapara, Bhadrak and Balasore coast",
+      "low_m": 1.0,
+      "high_m": 2.0,
+      "kind": "IMD estimate",
+      "source": "https://rsmcnewdelhi.imd.gov.in/uploads/report/26/26_5d5a67_Preliminary%20Report_SCS%20Dana_Approved.pdf",
+      "modelled_m": 2.77
+    }
+  },
+  "rain": {
+    "model": "R-CLIPER parametric rain (Tuleya et al. 2007) along the best track",
+    "truth": "NASA GPM IMERG V07, 3 days either side of landfall",
+    "n": 3325,
+    "spearman": 0.9553217895262583,
+    "median_ratio": 1.093543078820198,
+    "max_modelled_mm": 197.0,
+    "max_observed_mm": 245.0,
+    "extreme_sites": 0
+  },
+  "roads": {
+    "roads": 4432,
+    "km": 9761,
+    "km_cut": 38,
+    "km_at_risk": 0,
+    "first_closure": null,
+    "cut_by_surge": 2
+  },
+  "insurance": {
+    "terms": "Illustrative: index = wind reached at 25% of a district's sites; pays 25/50/100% at 64/83/96 kt",
+    "districts": [
+      {
+        "district": "Kendrapara",
+        "lat": 20.536,
+        "lon": 86.62,
+        "sites": 192,
+        "index_kt": 61.5235350896254,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 8,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Jagatsinghapur",
+        "lat": 20.254,
+        "lon": 86.407,
+        "sites": 102,
+        "index_kt": 61.30144757310182,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 13,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Bhadrak",
+        "lat": 20.998,
+        "lon": 86.679,
+        "sites": 196,
+        "index_kt": 59.89475377189382,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 13,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Jajapur",
+        "lat": 20.836,
+        "lon": 86.205,
+        "sites": 166,
+        "index_kt": 56.22211375054155,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 30,
+        "observed_outage_rate": 0.03333333333333333
+      },
+      {
+        "district": "Baleshwar",
+        "lat": 21.458,
+        "lon": 86.93,
+        "sites": 401,
+        "index_kt": 55.7429994666218,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 29,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Mayurbhanj",
+        "lat": 21.575,
+        "lon": 86.583,
+        "sites": 45,
+        "index_kt": 52.20431066385247,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 2,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Kendujhar",
+        "lat": 21.387,
+        "lon": 85.85,
+        "sites": 65,
+        "index_kt": 49.98409945425188,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 8,
+        "observed_outage_rate": 0.125
+      },
+      {
+        "district": "Puri",
+        "lat": 19.891,
+        "lon": 85.838,
+        "sites": 339,
+        "index_kt": 48.08825081198458,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 13,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Purba Medinipur",
+        "lat": 21.653,
+        "lon": 87.531,
+        "sites": 9,
+        "index_kt": 46.930880734618476,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Cuttack",
+        "lat": 20.441,
+        "lon": 85.807,
+        "sites": 418,
+        "index_kt": 46.75878697249044,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 42,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Khordha",
+        "lat": 20.182,
+        "lon": 85.692,
+        "sites": 446,
+        "index_kt": 44.675918260036845,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 21,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Dhenkanal",
+        "lat": 20.789,
+        "lon": 85.544,
+        "sites": 153,
+        "index_kt": 41.537875255381316,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 20,
+        "observed_outage_rate": 0.05
+      },
+      {
+        "district": "Nayagarh",
+        "lat": 20.182,
+        "lon": 85.137,
+        "sites": 80,
+        "index_kt": 35.85833238234751,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 3,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Anugul",
+        "lat": 20.949,
+        "lon": 85.008,
+        "sites": 285,
+        "index_kt": 34.80473919432208,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 29,
+        "observed_outage_rate": 0.06896551724137931
+      },
+      {
+        "district": "Ganjam",
+        "lat": 19.432,
+        "lon": 84.821,
+        "sites": 384,
+        "index_kt": 31.34488760564335,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 17,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Debagarh",
+        "lat": 21.461,
+        "lon": 84.812,
+        "sites": 16,
+        "index_kt": 30.95569002036632,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 3,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Bauda",
+        "lat": 20.575,
+        "lon": 84.478,
+        "sites": 6,
+        "index_kt": 28.794258687088337,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Srikakulam",
+        "lat": 19.09,
+        "lon": 84.669,
+        "sites": 11,
+        "index_kt": 28.770865888755743,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 1,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Kandhamal",
+        "lat": 20.289,
+        "lon": 84.442,
+        "sites": 5,
+        "index_kt": 28.54681440335171,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Sambalpur",
+        "lat": 21.322,
+        "lon": 84.449,
+        "sites": 3,
+        "index_kt": 28.040647562413703,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      }
+    ]
+  },
+  "forecasts": [
+    {
+      "key": "20241022T00Z",
+      "issued": "2024-10-22T00:00:00Z",
+      "lead_h": 68.0,
+      "storm_id": "70B",
+      "members": 36,
+      "assets_likely_gale": 685,
+      "assets_likely_hurricane": 0,
+      "max_p_outage": 2.6812050325510247e-07,
+      "source": "ECMWF IFS ensemble tropical-cyclone tracks, as issued (open data, CC BY 4.0)",
+      "districts": [
+        {
+          "district": "Kendrapara",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 40.217903915959
+        },
+        {
+          "district": "Jagatsinghapur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 39.50995325966741
+        },
+        {
+          "district": "Bhadrak",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 37.26448934574665
+        },
+        {
+          "district": "Jajapur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 35.7578114236635
+        },
+        {
+          "district": "Puri",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 34.05443045087713
+        },
+        {
+          "district": "Cuttack",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 32.401928959068925
+        },
+        {
+          "district": "Baleshwar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 32.2143410517673
+        },
+        {
+          "district": "Kendujhar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 31.702584805846044
+        },
+        {
+          "district": "Dhenkanal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 30.79834167142935
+        },
+        {
+          "district": "Khordha",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 30.703791502355756
+        },
+        {
+          "district": "Mayurbhanj",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 29.12070620591519
+        },
+        {
+          "district": "Nayagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 27.544450665697408
+        },
+        {
+          "district": "Anugul",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 25.96240649491995
+        },
+        {
+          "district": "Purba Medinipur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 25.935164447666644
+        },
+        {
+          "district": "Ganjam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 23.496539585706692
+        },
+        {
+          "district": "Bauda",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 22.797472544152484
+        },
+        {
+          "district": "Kandhamal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 22.641003761030124
+        },
+        {
+          "district": "Debagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 21.980563920928063
+        },
+        {
+          "district": "Sambalpur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 21.17791174758559
+        },
+        {
+          "district": "Srikakulam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 21.010145615564277
+        }
+      ]
+    },
+    {
+      "key": "20241022T12Z",
+      "issued": "2024-10-22T12:00:00Z",
+      "lead_h": 56.0,
+      "storm_id": "70B",
+      "members": 51,
+      "assets_likely_gale": 216,
+      "assets_likely_hurricane": 0,
+      "max_p_outage": 5.539732813887286e-07,
+      "source": "ECMWF IFS ensemble tropical-cyclone tracks, as issued (open data, CC BY 4.0)",
+      "districts": [
+        {
+          "district": "Kendrapara",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 37.078121169514105
+        },
+        {
+          "district": "Jagatsinghapur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 35.0934623878515
+        },
+        {
+          "district": "Bhadrak",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 34.69129480709553
+        },
+        {
+          "district": "Jajapur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 31.45885890274674
+        },
+        {
+          "district": "Baleshwar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 31.164133729776445
+        },
+        {
+          "district": "Purba Medinipur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 28.89294521002256
+        },
+        {
+          "district": "Kendujhar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 28.212321980140697
+        },
+        {
+          "district": "Mayurbhanj",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 28.20287006085728
+        },
+        {
+          "district": "Cuttack",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 27.547325631233303
+        },
+        {
+          "district": "Puri",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 27.022465167052587
+        },
+        {
+          "district": "Khordha",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 25.970766237014562
+        },
+        {
+          "district": "Dhenkanal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 25.339060317756875
+        },
+        {
+          "district": "Nayagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 22.78857846300734
+        },
+        {
+          "district": "Anugul",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 22.120253093820708
+        },
+        {
+          "district": "Debagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 19.574128456043233
+        },
+        {
+          "district": "Ganjam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 19.13066634809845
+        },
+        {
+          "district": "Bauda",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 18.320758448771656
+        },
+        {
+          "district": "Sambalpur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 18.188545405118727
+        },
+        {
+          "district": "Kandhamal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 17.961177716161732
+        },
+        {
+          "district": "Srikakulam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 17.341978433965306
+        }
+      ]
+    },
+    {
+      "key": "20241023T00Z",
+      "issued": "2024-10-23T00:00:00Z",
+      "lead_h": 44.0,
+      "storm_id": "70B",
+      "members": 52,
+      "assets_likely_gale": 1895,
+      "assets_likely_hurricane": 0,
+      "max_p_outage": 6.068186453417059e-07,
+      "source": "ECMWF IFS ensemble tropical-cyclone tracks, as issued (open data, CC BY 4.0)",
+      "districts": [
+        {
+          "district": "Jagatsinghapur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 45.59727757513788
+        },
+        {
+          "district": "Kendrapara",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 44.31309962027699
+        },
+        {
+          "district": "Puri",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 40.97554980212903
+        },
+        {
+          "district": "Jajapur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 40.74235160113351
+        },
+        {
+          "district": "Bhadrak",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 40.40671535815012
+        },
+        {
+          "district": "Cuttack",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 39.85529772897769
+        },
+        {
+          "district": "Khordha",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 39.28099236338521
+        },
+        {
+          "district": "Kendujhar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 36.02747879592265
+        },
+        {
+          "district": "Dhenkanal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 35.48198303541772
+        },
+        {
+          "district": "Baleshwar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 34.7590654197844
+        },
+        {
+          "district": "Mayurbhanj",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 32.37968739307133
+        },
+        {
+          "district": "Nayagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 30.630702238789812
+        },
+        {
+          "district": "Anugul",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 30.17447378054978
+        },
+        {
+          "district": "Purba Medinipur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 26.436511389082078
+        },
+        {
+          "district": "Bauda",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 24.715491103012745
+        },
+        {
+          "district": "Debagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 24.535564094734674
+        },
+        {
+          "district": "Ganjam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 24.519162543563716
+        },
+        {
+          "district": "Kandhamal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 23.983971513713406
+        },
+        {
+          "district": "Sambalpur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 23.325778216697234
+        },
+        {
+          "district": "Srikakulam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 21.612482868382017
+        }
+      ]
+    },
+    {
+      "key": "20241023T12Z",
+      "issued": "2024-10-23T12:00:00Z",
+      "lead_h": 32.0,
+      "storm_id": "03B",
+      "members": 52,
+      "assets_likely_gale": 1979,
+      "assets_likely_hurricane": 0,
+      "max_p_outage": 2.152202340929244e-06,
+      "source": "ECMWF IFS ensemble tropical-cyclone tracks, as issued (open data, CC BY 4.0)",
+      "districts": [
+        {
+          "district": "Jagatsinghapur",
+          "p_trigger": 0.019230769230769232,
+          "expected_payout_share": 0.004807692307692308,
+          "index_kt": 48.390603021577604
+        },
+        {
+          "district": "Kendrapara",
+          "p_trigger": 0.019230769230769232,
+          "expected_payout_share": 0.004807692307692308,
+          "index_kt": 47.700738590896165
+        },
+        {
+          "district": "Jajapur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 43.86895409693264
+        },
+        {
+          "district": "Bhadrak",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 42.868791408892974
+        },
+        {
+          "district": "Cuttack",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 42.03404767119389
+        },
+        {
+          "district": "Puri",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 40.64344698101987
+        },
+        {
+          "district": "Khordha",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 39.57364587557026
+        },
+        {
+          "district": "Dhenkanal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 37.93884325876922
+        },
+        {
+          "district": "Kendujhar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 36.81248263654102
+        },
+        {
+          "district": "Baleshwar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 36.26589672474871
+        },
+        {
+          "district": "Mayurbhanj",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 33.296039394682396
+        },
+        {
+          "district": "Anugul",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 32.42469792755088
+        },
+        {
+          "district": "Nayagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 31.134085267654076
+        },
+        {
+          "district": "Purba Medinipur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 28.071802519080258
+        },
+        {
+          "district": "Debagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 25.825941884780534
+        },
+        {
+          "district": "Bauda",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 25.383545887514096
+        },
+        {
+          "district": "Kandhamal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 24.748083716756458
+        },
+        {
+          "district": "Sambalpur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 24.523829432528103
+        },
+        {
+          "district": "Ganjam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 24.045575619576354
+        },
+        {
+          "district": "Srikakulam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 21.319820704489132
+        }
+      ]
+    },
+    {
+      "key": "20241024T00Z",
+      "issued": "2024-10-24T00:00:00Z",
+      "lead_h": 20.0,
+      "storm_id": "03B",
+      "members": 52,
+      "assets_likely_gale": 1925,
+      "assets_likely_hurricane": 0,
+      "max_p_outage": 8.034231937745753e-07,
+      "source": "ECMWF IFS ensemble tropical-cyclone tracks, as issued (open data, CC BY 4.0)",
+      "districts": [
+        {
+          "district": "Kendrapara",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 48.90579398057558
+        },
+        {
+          "district": "Jagatsinghapur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 48.27904678416672
+        },
+        {
+          "district": "Bhadrak",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 45.69282750730005
+        },
+        {
+          "district": "Jajapur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 45.52221248449329
+        },
+        {
+          "district": "Baleshwar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 39.29884874256494
+        },
+        {
+          "district": "Kendujhar",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 39.27682429401603
+        },
+        {
+          "district": "Cuttack",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 39.1999539019464
+        },
+        {
+          "district": "Puri",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 38.89195979236974
+        },
+        {
+          "district": "Khordha",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 36.741648710777866
+        },
+        {
+          "district": "Dhenkanal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 36.28481913292334
+        },
+        {
+          "district": "Mayurbhanj",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 36.24246429101649
+        },
+        {
+          "district": "Purba Medinipur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 29.581781710792622
+        },
+        {
+          "district": "Anugul",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 29.222436044097748
+        },
+        {
+          "district": "Nayagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 28.65740909763661
+        },
+        {
+          "district": "Debagarh",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 25.19572968860067
+        },
+        {
+          "district": "Bauda",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 23.27055226463402
+        },
+        {
+          "district": "Ganjam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 22.848022530316644
+        },
+        {
+          "district": "Kandhamal",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 22.420983262831708
+        },
+        {
+          "district": "Sambalpur",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 22.389185982369487
+        },
+        {
+          "district": "Srikakulam",
+          "p_trigger": 0.0,
+          "expected_payout_share": 0.0,
+          "index_kt": 20.44572748612773
+        }
+      ]
+    }
+  ],
+  "built_at": "2026-09-27T12:37:16Z"
+}

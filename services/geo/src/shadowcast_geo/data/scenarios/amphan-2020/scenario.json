@@ -1,0 +1,257 @@
+{
+  "id": "amphan-2020",
+  "storm": "Amphan",
+  "season": 2020,
+  "region": {
+    "id": "west-bengal-coast",
+    "name": "West Bengal coast (Digha to Kolkata and the Sundarbans)",
+    "bbox": [
+      21.5,
+      87.4,
+      23.0,
+      89.0
+    ]
+  },
+  "landfall": "2020-05-20T11:00:00Z",
+  "peak_vmax_kt": 145.0,
+  "track_source": "IBTrACS best track (JTWC intensity and wind radii)",
+  "asset_counts": {
+    "hospital": 616,
+    "health_centre": 486,
+    "school": 473,
+    "clinic": 298,
+    "substation": 167,
+    "water_works": 85,
+    "police": 69,
+    "power_plant": 18,
+    "fire_station": 15
+  },
+  "model": {
+    "intercept": -26.847865888829688,
+    "slope": 0.2515101025609214,
+    "trained_on": "fani-2019",
+    "n": 200,
+    "auc": 0.9729020979020979,
+    "brier": 0.04885342409361702
+  },
+  "skill": {
+    "n": 156.0,
+    "observed_outage_rate": 0.28205128205128205,
+    "auc": 0.4354707792207792,
+    "brier": 0.27760068437369234,
+    "spearman": -0.015583758752034896,
+    "out_of_sample": true
+  },
+  "loss_by_band": [
+    {
+      "low_kt": 0.0,
+      "high_kt": 60.0,
+      "n": 17.0,
+      "p25": 6.542574884619667,
+      "median": 26.51440366244867,
+      "p75": 43.377870473300305
+    },
+    {
+      "low_kt": 60.0,
+      "high_kt": 80.0,
+      "n": 41.0,
+      "p25": 32.96210231185073,
+      "median": 50.27902930670534,
+      "p75": 64.39237387610561
+    },
+    {
+      "low_kt": 80.0,
+      "high_kt": 100.0,
+      "n": 98.0,
+      "p25": 28.874485829204342,
+      "median": 41.447326133902294,
+      "p75": 47.3843142491018
+    }
+  ],
+  "surge": {
+    "peak_m": 3.77,
+    "lat": 21.692,
+    "lon": 88.475,
+    "time": "2020-05-20T10:15:00Z",
+    "coast_points": 111,
+    "flooded_sites": 2,
+    "method": "1D wind setup over ETOPO1 shelf transects plus inverse barometer; no tide, waves or rivers",
+    "observed": {
+      "place": "South and North 24 Parganas",
+      "low_m": 4.6,
+      "high_m": 4.6,
+      "kind": "post-storm survey (ACWC Kolkata)",
+      "source": "https://rsmcnewdelhi.imd.gov.in/uploads/report/26/26_3c837f_amphan%20with%20damage.pdf",
+      "modelled_m": 3.77
+    }
+  },
+  "rain": {
+    "model": "R-CLIPER parametric rain (Tuleya et al. 2007) along the best track",
+    "truth": "NASA GPM IMERG V07, 3 days either side of landfall",
+    "n": 2227,
+    "spearman": 0.14161647102731376,
+    "median_ratio": 1.3639302311772208,
+    "max_modelled_mm": 117.0,
+    "max_observed_mm": 162.0,
+    "extreme_sites": 0
+  },
+  "roads": {
+    "roads": 3333,
+    "km": 5297,
+    "km_cut": 403,
+    "km_at_risk": 3852,
+    "first_closure": "2020-05-20T08:45:00Z",
+    "cut_by_surge": 2
+  },
+  "insurance": {
+    "terms": "Illustrative: index = wind reached at 25% of a district's sites; pays 25/50/100% at 64/83/96 kt",
+    "districts": [
+      {
+        "district": "South 24 Parganas",
+        "lat": 22.349,
+        "lon": 88.371,
+        "sites": 372,
+        "index_kt": 93.32676634827979,
+        "payout_share": 0.5,
+        "trigger_time": "2020-05-20T12:00:00Z",
+        "lead_h": -1.0,
+        "lit_substations": 38,
+        "observed_outage_rate": 0.47368421052631576
+      },
+      {
+        "district": "Kolkata",
+        "lat": 22.553,
+        "lon": 88.362,
+        "sites": 374,
+        "index_kt": 89.65927884818547,
+        "payout_share": 0.5,
+        "trigger_time": "2020-05-20T13:30:00Z",
+        "lead_h": -2.5,
+        "lit_substations": 4,
+        "observed_outage_rate": 0.25
+      },
+      {
+        "district": "North 24 Parganas",
+        "lat": 22.689,
+        "lon": 88.508,
+        "sites": 453,
+        "index_kt": 88.67775989636596,
+        "payout_share": 0.5,
+        "trigger_time": "2020-05-20T13:45:00Z",
+        "lead_h": -2.75,
+        "lit_substations": 38,
+        "observed_outage_rate": 0.05263157894736842
+      },
+      {
+        "district": "Haora",
+        "lat": 22.553,
+        "lon": 88.162,
+        "sites": 251,
+        "index_kt": 86.01909871682274,
+        "payout_share": 0.5,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 21,
+        "observed_outage_rate": 0.38095238095238093
+      },
+      {
+        "district": "Nadia",
+        "lat": 22.952,
+        "lon": 88.548,
+        "sites": 70,
+        "index_kt": 82.82150966870094,
+        "payout_share": 0.25,
+        "trigger_time": "2020-05-20T14:45:00Z",
+        "lead_h": -3.75,
+        "lit_substations": 3,
+        "observed_outage_rate": 0.6666666666666666
+      },
+      {
+        "district": "Purba Medinipur",
+        "lat": 22.078,
+        "lon": 87.855,
+        "sites": 192,
+        "index_kt": 78.6927449445632,
+        "payout_share": 0.25,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 29,
+        "observed_outage_rate": 0.3103448275862069
+      },
+      {
+        "district": "Hugli",
+        "lat": 22.82,
+        "lon": 88.07,
+        "sites": 386,
+        "index_kt": 74.46503922732938,
+        "payout_share": 0.25,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 19,
+        "observed_outage_rate": 0.15789473684210525
+      },
+      {
+        "district": "Satkhira",
+        "lat": 22.76,
+        "lon": 88.966,
+        "sites": 29,
+        "index_kt": 73.7217262196117,
+        "payout_share": 0.25,
+        "trigger_time": "2020-05-20T15:45:00Z",
+        "lead_h": -4.75,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Baleshwar",
+        "lat": 21.671,
+        "lon": 87.43,
+        "sites": 13,
+        "index_kt": 52.08878432625208,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 1,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Barddhaman",
+        "lat": 22.982,
+        "lon": 87.853,
+        "sites": 10,
+        "index_kt": 48.269323703733804,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Pashchim Medinipur",
+        "lat": 22.44,
+        "lon": 87.586,
+        "sites": 65,
+        "index_kt": 46.66300677281842,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 3,
+        "observed_outage_rate": 0.3333333333333333
+      },
+      {
+        "district": "Bankura",
+        "lat": 22.953,
+        "lon": 87.533,
+        "sites": 12,
+        "index_kt": 37.36066504933759,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      }
+    ]
+  },
+  "forecasts": [],
+  "built_at": "2026-09-27T12:50:35Z"
+}

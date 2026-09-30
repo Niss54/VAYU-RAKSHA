@@ -1,0 +1,70 @@
+[
+  {
+    "id": "fani-2019",
+    "storm": "Fani",
+    "season": 2019,
+    "region": {
+      "id": "odisha-coast",
+      "name": "Odisha coast (Ganjam to Balasore)",
+      "bbox": [
+        19.0,
+        84.4,
+        21.7,
+        87.6
+      ]
+    },
+    "landfall": "2019-05-03T03:30:00Z",
+    "peak_vmax_kt": 150.0
+  },
+  {
+    "id": "dana-2024",
+    "storm": "Dana",
+    "season": 2024,
+    "region": {
+      "id": "odisha-coast",
+      "name": "Odisha coast (Ganjam to Balasore)",
+      "bbox": [
+        19.0,
+        84.4,
+        21.7,
+        87.6
+      ]
+    },
+    "landfall": "2024-10-24T20:00:00Z",
+    "peak_vmax_kt": 65.0
+  },
+  {
+    "id": "hudhud-2014",
+    "storm": "Hudhud",
+    "season": 2014,
+    "region": {
+      "id": "north-andhra-coast",
+      "name": "North Andhra coast (Visakhapatnam to Srikakulam)",
+      "bbox": [
+        17.2,
+        82.4,
+        18.8,
+        84.3
+      ]
+    },
+    "landfall": "2014-10-12T07:00:00Z",
+    "peak_vmax_kt": 115.0
+  },
+  {
+    "id": "amphan-2020",
+    "storm": "Amphan",
+    "season": 2020,
+    "region": {
+      "id": "west-bengal-coast",
+      "name": "West Bengal coast (Digha to Kolkata and the Sundarbans)",
+      "bbox": [
+        21.5,
+        87.4,
+        23.0,
+        89.0
+      ]
+    },
+    "landfall": "2020-05-20T11:00:00Z",
+    "peak_vmax_kt": 145.0
+  }
+]

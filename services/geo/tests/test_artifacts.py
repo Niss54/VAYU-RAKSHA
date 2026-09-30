@@ -1,9 +1,10 @@
 import json
+from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
 
-from shadowcast_geo.artifacts import GcsArtifacts, artifact_store
+from shadowcast_geo.artifacts import GcsArtifacts, LocalArtifacts, artifact_store
 from shadowcast_geo.config import Settings
 
 
@@ -35,9 +36,14 @@ def test_gcs_rejects_non_finite_numbers() -> None:
         GcsArtifacts("b", client=MagicMock()).write_json("x.json", {"auc": float("nan")})
 
 
-def test_artifact_store_is_the_bucket(monkeypatch: pytest.MonkeyPatch) -> None:
-    gcs = MagicMock(name="GcsArtifacts")
-    monkeypatch.setattr("shadowcast_geo.artifacts.GcsArtifacts", gcs)
+def test_local_artifacts(tmp_path: Path) -> None:
+    store = LocalArtifacts(tmp_path)
+    store.write_json("scenarios/index.json", [{"id": "fani-2019"}])
+    assert store.exists("scenarios/index.json") is True
+    assert store.read_json("scenarios/index.json") == [{"id": "fani-2019"}]
+    assert store.names("scenarios/") == ["scenarios/index.json"]
 
-    assert artifact_store(Settings(bucket="b")) is gcs.return_value
-    gcs.assert_called_once_with("b")
+
+def test_artifact_store_resolves() -> None:
+    store = artifact_store(Settings(bucket="b"))
+    assert store.exists("scenarios/index.json") is True

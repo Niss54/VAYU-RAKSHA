@@ -1,0 +1,977 @@
+[
+  {
+    "time": "2024-10-21T06:00:00Z",
+    "vmax_kt": 20.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.3,
+    "lon": 92.1
+  },
+  {
+    "time": "2024-10-21T09:00:00Z",
+    "vmax_kt": 20.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.2,
+    "lon": 92.1
+  },
+  {
+    "time": "2024-10-21T12:00:00Z",
+    "vmax_kt": 20.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.2,
+    "lon": 92.1
+  },
+  {
+    "time": "2024-10-21T15:00:00Z",
+    "vmax_kt": 20.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.2,
+    "lon": 92.1
+  },
+  {
+    "time": "2024-10-21T18:00:00Z",
+    "vmax_kt": 20.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.2,
+    "lon": 92.0
+  },
+  {
+    "time": "2024-10-21T21:00:00Z",
+    "vmax_kt": 20.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.1,
+    "lon": 92.0
+  },
+  {
+    "time": "2024-10-22T00:00:00Z",
+    "vmax_kt": 20.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.2,
+    "lon": 91.9
+  },
+  {
+    "time": "2024-10-22T03:00:00Z",
+    "vmax_kt": 23.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.2,
+    "lon": 91.8
+  },
+  {
+    "time": "2024-10-22T06:00:00Z",
+    "vmax_kt": 25.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.3,
+    "lon": 91.6
+  },
+  {
+    "time": "2024-10-22T09:00:00Z",
+    "vmax_kt": 25.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.3,
+    "lon": 91.5
+  },
+  {
+    "time": "2024-10-22T12:00:00Z",
+    "vmax_kt": 25.0,
+    "rmw_km": 138.9,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.4,
+    "lon": 91.4
+  },
+  {
+    "time": "2024-10-22T15:00:00Z",
+    "vmax_kt": 28.0,
+    "rmw_km": 129.6,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.5,
+    "lon": 91.1
+  },
+  {
+    "time": "2024-10-22T18:00:00Z",
+    "vmax_kt": 30.0,
+    "rmw_km": 120.4,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.6,
+    "lon": 90.7
+  },
+  {
+    "time": "2024-10-22T21:00:00Z",
+    "vmax_kt": 33.0,
+    "rmw_km": 107.4,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 15.8,
+    "lon": 90.3
+  },
+  {
+    "time": "2024-10-23T00:00:00Z",
+    "vmax_kt": 35.0,
+    "rmw_km": 92.6,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 16.1,
+    "lon": 89.9
+  },
+  {
+    "time": "2024-10-23T03:00:00Z",
+    "vmax_kt": 38.0,
+    "rmw_km": 74.1,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 16.4,
+    "lon": 89.6
+  },
+  {
+    "time": "2024-10-23T06:00:00Z",
+    "vmax_kt": 40.0,
+    "rmw_km": 55.6,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 16.7,
+    "lon": 89.3
+  },
+  {
+    "time": "2024-10-23T09:00:00Z",
+    "vmax_kt": 45.0,
+    "rmw_km": 55.6,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 16.9,
+    "lon": 89.1
+  },
+  {
+    "time": "2024-10-23T12:00:00Z",
+    "vmax_kt": 50.0,
+    "rmw_km": 55.6,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 17.3,
+    "lon": 89.0
+  },
+  {
+    "time": "2024-10-23T15:00:00Z",
+    "vmax_kt": 53.0,
+    "rmw_km": 46.3,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 17.6,
+    "lon": 88.8
+  },
+  {
+    "time": "2024-10-23T18:00:00Z",
+    "vmax_kt": 55.0,
+    "rmw_km": 37.0,
+    "r34_km": [
+      148.2,
+      148.2,
+      111.1,
+      92.6
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 18.0,
+    "lon": 88.7
+  },
+  {
+    "time": "2024-10-23T21:00:00Z",
+    "vmax_kt": 58.0,
+    "rmw_km": 37.0,
+    "r34_km": [
+      181.5,
+      163.0,
+      138.9,
+      135.2
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 18.3,
+    "lon": 88.4
+  },
+  {
+    "time": "2024-10-24T00:00:00Z",
+    "vmax_kt": 60.0,
+    "rmw_km": 37.0,
+    "r34_km": [
+      213.0,
+      175.9,
+      166.7,
+      175.9
+    ],
+    "r50_km": [
+      83.3,
+      92.6,
+      64.8,
+      74.1
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 18.7,
+    "lon": 88.2
+  },
+  {
+    "time": "2024-10-24T03:00:00Z",
+    "vmax_kt": 63.0,
+    "rmw_km": 37.0,
+    "r34_km": [
+      213.0,
+      175.9,
+      166.7,
+      175.9
+    ],
+    "r50_km": [
+      101.9,
+      101.9,
+      83.3,
+      92.6
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 19.0,
+    "lon": 88.0
+  },
+  {
+    "time": "2024-10-24T06:00:00Z",
+    "vmax_kt": 65.0,
+    "rmw_km": 37.0,
+    "r34_km": [
+      213.0,
+      175.9,
+      166.7,
+      175.9
+    ],
+    "r50_km": [
+      120.4,
+      111.1,
+      101.9,
+      111.1
+    ],
+    "r64_km": [
+      74.1,
+      55.6,
+      46.3,
+      64.8
+    ],
+    "lat": 19.3,
+    "lon": 87.8
+  },
+  {
+    "time": "2024-10-24T09:00:00Z",
+    "vmax_kt": 65.0,
+    "rmw_km": 46.3,
+    "r34_km": [
+      213.0,
+      175.9,
+      153.7,
+      175.9
+    ],
+    "r50_km": [
+      125.9,
+      120.4,
+      88.9,
+      111.1
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 19.5,
+    "lon": 87.6
+  },
+  {
+    "time": "2024-10-24T12:00:00Z",
+    "vmax_kt": 65.0,
+    "rmw_km": 55.6,
+    "r34_km": [
+      213.0,
+      175.9,
+      138.9,
+      175.9
+    ],
+    "r50_km": [
+      129.6,
+      129.6,
+      74.1,
+      111.1
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 19.8,
+    "lon": 87.5
+  },
+  {
+    "time": "2024-10-24T15:00:00Z",
+    "vmax_kt": 63.0,
+    "rmw_km": 55.6,
+    "r34_km": [
+      213.0,
+      175.9,
+      138.9,
+      175.9
+    ],
+    "r50_km": [
+      129.6,
+      129.6,
+      74.1,
+      111.1
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 20.1,
+    "lon": 87.3
+  },
+  {
+    "time": "2024-10-24T18:00:00Z",
+    "vmax_kt": 60.0,
+    "rmw_km": 55.6,
+    "r34_km": [
+      213.0,
+      175.9,
+      138.9,
+      175.9
+    ],
+    "r50_km": [
+      129.6,
+      129.6,
+      74.1,
+      111.1
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 20.5,
+    "lon": 87.1
+  },
+  {
+    "time": "2024-10-24T21:00:00Z",
+    "vmax_kt": 58.0,
+    "rmw_km": 55.6,
+    "r34_km": [
+      213.0,
+      175.9,
+      138.9,
+      175.9
+    ],
+    "r50_km": [
+      129.6,
+      129.6,
+      74.1,
+      111.1
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 20.7,
+    "lon": 87.0
+  },
+  {
+    "time": "2024-10-25T00:00:00Z",
+    "vmax_kt": 55.0,
+    "rmw_km": 55.6,
+    "r34_km": [
+      213.0,
+      175.9,
+      138.9,
+      175.9
+    ],
+    "r50_km": [
+      129.6,
+      129.6,
+      74.1,
+      111.1
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 20.9,
+    "lon": 86.9
+  },
+  {
+    "time": "2024-10-25T03:00:00Z",
+    "vmax_kt": 53.0,
+    "rmw_km": 46.3,
+    "r34_km": [
+      181.5,
+      175.9,
+      120.4,
+      148.2
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 21.1,
+    "lon": 86.8
+  },
+  {
+    "time": "2024-10-25T06:00:00Z",
+    "vmax_kt": 50.0,
+    "rmw_km": 37.0,
+    "r34_km": [
+      148.2,
+      175.9,
+      101.9,
+      120.4
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 21.2,
+    "lon": 86.7
+  },
+  {
+    "time": "2024-10-25T09:00:00Z",
+    "vmax_kt": 45.0,
+    "rmw_km": 37.0,
+    "r34_km": [
+      101.9,
+      175.9,
+      79.6,
+      88.9
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 21.3,
+    "lon": 86.6
+  },
+  {
+    "time": "2024-10-25T12:00:00Z",
+    "vmax_kt": 40.0,
+    "rmw_km": 37.0,
+    "r34_km": [
+      55.6,
+      175.9,
+      55.6,
+      55.6
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 21.3,
+    "lon": 86.5
+  },
+  {
+    "time": "2024-10-25T15:00:00Z",
+    "vmax_kt": 35.0,
+    "rmw_km": 42.6,
+    "r34_km": [
+      27.8,
+      87.0,
+      27.8,
+      27.8
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 21.3,
+    "lon": 86.4
+  },
+  {
+    "time": "2024-10-25T18:00:00Z",
+    "vmax_kt": 30.0,
+    "rmw_km": 46.3,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 21.3,
+    "lon": 86.4
+  },
+  {
+    "time": "2024-10-25T21:00:00Z",
+    "vmax_kt": 25.0,
+    "rmw_km": 46.3,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 21.2,
+    "lon": 86.5
+  },
+  {
+    "time": "2024-10-26T00:00:00Z",
+    "vmax_kt": 20.0,
+    "rmw_km": 46.3,
+    "r34_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r50_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "r64_km": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "lat": 21.2,
+    "lon": 86.4
+  }
+]

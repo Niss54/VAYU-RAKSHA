@@ -134,43 +134,58 @@ def load_scenarios(store: ArtifactStore) -> dict[str, LoadedScenario]:
     Returns:
         dict[str, LoadedScenario]: Scenarios keyed by id (empty when nothing has been built yet).
     """
-    if not store.exists("scenarios/index.json"):
+    try:
+        if not store.exists("scenarios/index.json"):
+            return {}
+        entries = store.read_json("scenarios/index.json")
+    except Exception as e:
+        import logging
+        logging.getLogger("shadowcast_geo.api").warning("Failed to read scenario index: %s", e)
         return {}
+
     loaded: dict[str, LoadedScenario] = {}
-    for entry in store.read_json("scenarios/index.json"):
-        prefix = f"scenarios/{entry['id']}"
-        fixes = store.read_json(f"{prefix}/track.json")
-        assets = [Asset.model_validate(record) for record in store.read_json(f"{prefix}/assets.json")]
-        detail = ScenarioDetail.model_validate(store.read_json(f"{prefix}/scenario.json"))
-        forecasts = {
-            summary.key: LoadedForecast(
-                summary=summary,
-                assets=[
-                    ForecastAsset.model_validate(record)
-                    for record in store.read_json(f"{prefix}/forecasts/{summary.key}/assets.json")
-                ],
-                tracks=store.read_json(f"{prefix}/forecasts/{summary.key}/tracks.json"),
+    for entry in entries:
+        try:
+            prefix = f"scenarios/{entry['id']}"
+            fixes = store.read_json(f"{prefix}/track.json")
+            assets = [Asset.model_validate(record) for record in store.read_json(f"{prefix}/assets.json")]
+            detail = ScenarioDetail.model_validate(store.read_json(f"{prefix}/scenario.json"))
+            forecasts = {
+                summary.key: LoadedForecast(
+                    summary=summary,
+                    assets=[
+                        ForecastAsset.model_validate(record)
+                        for record in store.read_json(f"{prefix}/forecasts/{summary.key}/assets.json")
+                    ],
+                    tracks=store.read_json(f"{prefix}/forecasts/{summary.key}/tracks.json"),
+                )
+                for summary in detail.forecasts
+            }
+            loaded[entry["id"]] = LoadedScenario(
+                detail=detail,
+                fixes=fixes,
+                track=Track.from_records(fixes),
+                assets=assets,
+                by_id={asset.asset_id: asset for asset in assets},
+                lat=np.array([asset.lat for asset in assets]),
+                lon=np.array([asset.lon for asset in assets]),
+                backtest=store.read_json(f"{prefix}/backtest.json"),
+                surge=[SurgePoint.model_validate(point) for point in store.read_json(f"{prefix}/surge.json")],
+                roads=store.read_json(f"{prefix}/roads.json"),
+                evidence={
+                    name: store.read_bytes(f"{prefix}/evidence/{name}.png")
+                    for name in EVIDENCE_IMAGES
+                    if store.exists(f"{prefix}/evidence/{name}.png")
+                },
+                forecasts=forecasts,
+                cascade=store.read_json(f"{prefix}/cascade.json") if store.exists(f"{prefix}/cascade.json") else None,
+                isro=store.read_json(f"{prefix}/isro.json") if store.exists(f"{prefix}/isro.json") else None,
+                sar=store.read_json(f"{prefix}/sar_validation.json") if store.exists(f"{prefix}/sar_validation.json") else None,
+                climada=store.read_json(f"{prefix}/climada.json") if store.exists(f"{prefix}/climada.json") else None,
             )
-            for summary in detail.forecasts
-        }
-        loaded[entry["id"]] = LoadedScenario(
-            detail=detail,
-            fixes=fixes,
-            track=Track.from_records(fixes),
-            assets=assets,
-            by_id={asset.asset_id: asset for asset in assets},
-            lat=np.array([asset.lat for asset in assets]),
-            lon=np.array([asset.lon for asset in assets]),
-            backtest=store.read_json(f"{prefix}/backtest.json"),
-            surge=[SurgePoint.model_validate(point) for point in store.read_json(f"{prefix}/surge.json")],
-            roads=store.read_json(f"{prefix}/roads.json"),
-            evidence={name: store.read_bytes(f"{prefix}/evidence/{name}.png") for name in EVIDENCE_IMAGES},
-            forecasts=forecasts,
-            cascade=store.read_json(f"{prefix}/cascade.json") if store.exists(f"{prefix}/cascade.json") else None,
-            isro=store.read_json(f"{prefix}/isro.json") if store.exists(f"{prefix}/isro.json") else None,
-            sar=store.read_json(f"{prefix}/sar_validation.json") if store.exists(f"{prefix}/sar_validation.json") else None,
-            climada=store.read_json(f"{prefix}/climada.json") if store.exists(f"{prefix}/climada.json") else None,
-        )
+        except Exception as e:
+            import logging
+            logging.getLogger("shadowcast_geo.api").warning("Failed to load scenario %s: %s", entry.get("id"), e)
     return loaded
 
 
@@ -256,8 +271,24 @@ async def live(request: Request) -> LiveFeed:
     cache.lock = cache.lock or asyncio.Lock()
     async with cache.lock:
         if cache.feed is None or time.monotonic() - cache.read_at > cache.ttl_s:
-            cache.feed = LiveFeed.model_validate(await asyncio.to_thread(digest, cache.archive))
-            cache.read_at = time.monotonic()
+            try:
+                cache.feed = LiveFeed.model_validate(await asyncio.to_thread(digest, cache.archive))
+                cache.read_at = time.monotonic()
+            except Exception:
+                try:
+                    import json
+                    import urllib.request
+
+                    req = urllib.request.Request(
+                        "https://shadowcast-geo-489356738785.asia-south1.run.app/live",
+                        headers={"User-Agent": "vayu-raksha/2.0"},
+                    )
+                    with urllib.request.urlopen(req, timeout=5) as resp:
+                        cache.feed = LiveFeed.model_validate(json.loads(resp.read().decode("utf-8")))
+                        cache.read_at = time.monotonic()
+                except Exception:
+                    cache.feed = LiveFeed(run_at=None, cyclones=[], warnings=[])
+                    cache.read_at = time.monotonic()
     return cache.feed
 
 
@@ -486,7 +517,21 @@ def create_app(
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         app.state.scenarios = load_scenarios(store or artifact_store(settings))
-        app.state.live = LiveCache(archive or GcsArtifacts(settings.archive_bucket), settings.live_ttl_s)
+        live_reader = archive
+        if live_reader is None:
+            try:
+                from shadowcast_geo.artifacts import FallbackArchiveReader
+
+                gcs_reader = GcsArtifacts(settings.archive_bucket)
+                if getattr(gcs_reader, "_disabled", False):
+                    live_reader = FallbackArchiveReader()
+                else:
+                    live_reader = gcs_reader
+            except Exception:
+                from shadowcast_geo.artifacts import FallbackArchiveReader
+
+                live_reader = FallbackArchiveReader()
+        app.state.live = LiveCache(live_reader, settings.live_ttl_s)
         yield
 
     app = FastAPI(

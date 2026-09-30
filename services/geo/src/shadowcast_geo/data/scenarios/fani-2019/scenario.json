@@ -1,0 +1,405 @@
+{
+  "id": "fani-2019",
+  "storm": "Fani",
+  "season": 2019,
+  "region": {
+    "id": "odisha-coast",
+    "name": "Odisha coast (Ganjam to Balasore)",
+    "bbox": [
+      19.0,
+      84.4,
+      21.7,
+      87.6
+    ]
+  },
+  "landfall": "2019-05-03T03:30:00Z",
+  "peak_vmax_kt": 150.0,
+  "track_source": "IBTrACS best track (JTWC intensity and wind radii)",
+  "asset_counts": {
+    "health_centre": 796,
+    "cyclone_shelter": 765,
+    "hospital": 671,
+    "clinic": 358,
+    "substation": 264,
+    "school": 247,
+    "water_works": 105,
+    "police": 65,
+    "power_plant": 38,
+    "fire_station": 16
+  },
+  "model": {
+    "intercept": -26.847865888829688,
+    "slope": 0.2515101025609214,
+    "trained_on": "fani-2019",
+    "n": 200,
+    "auc": 0.9729020979020979,
+    "brier": 0.04885342409361702
+  },
+  "skill": {
+    "n": 200.0,
+    "observed_outage_rate": 0.22,
+    "auc": 0.9729020979020979,
+    "brier": 0.04885342409361702,
+    "spearman": 0.6481137028425712,
+    "out_of_sample": false,
+    "spatial_holdout": {
+      "folds": 5,
+      "n": 200.0,
+      "auc": 0.9692599067599068,
+      "brier": 0.050317822101058514,
+      "blocks": [
+        {
+          "lat_min": 19.1042438,
+          "lat_max": 20.2294365,
+          "n": 40.0,
+          "observed_outage_rate": 0.425,
+          "auc": 0.9437340153452686
+        },
+        {
+          "lat_min": 20.2365056,
+          "lat_max": 20.5079214,
+          "n": 40.0,
+          "observed_outage_rate": 0.575,
+          "auc": 0.9130434782608695
+        },
+        {
+          "lat_min": 20.5134649,
+          "lat_max": 20.8307342,
+          "n": 40.0,
+          "observed_outage_rate": 0.1,
+          "auc": 0.8472222222222222
+        },
+        {
+          "lat_min": 20.8324412,
+          "lat_max": 21.0203538,
+          "n": 40.0,
+          "observed_outage_rate": 0.0,
+          "auc": null
+        },
+        {
+          "lat_min": 21.028449,
+          "lat_max": 21.6911938,
+          "n": 40.0,
+          "observed_outage_rate": 0.0,
+          "auc": null
+        }
+      ]
+    }
+  },
+  "loss_by_band": [
+    {
+      "low_kt": 0.0,
+      "high_kt": 60.0,
+      "n": 47.0,
+      "p25": -15.301018473715677,
+      "median": -9.230924991275113,
+      "p75": -2.831567241112287
+    },
+    {
+      "low_kt": 60.0,
+      "high_kt": 80.0,
+      "n": 35.0,
+      "p25": -13.881865235097857,
+      "median": -4.789695919256398,
+      "p75": 2.2640374016658473
+    },
+    {
+      "low_kt": 80.0,
+      "high_kt": 100.0,
+      "n": 60.0,
+      "p25": -6.217049714088341,
+      "median": 2.3001825214091776,
+      "p75": 14.063994662265157
+    },
+    {
+      "low_kt": 100.0,
+      "high_kt": 130.0,
+      "n": 58.0,
+      "p25": 48.53921262197453,
+      "median": 76.5731213712306,
+      "p75": 86.60823638462809
+    }
+  ],
+  "surge": {
+    "peak_m": 2.64,
+    "lat": 21.375,
+    "lon": 86.942,
+    "time": "2019-05-03T12:45:00Z",
+    "coast_points": 239,
+    "flooded_sites": 0,
+    "method": "1D wind setup over ETOPO1 shelf transects plus inverse barometer; no tide, waves or rivers",
+    "observed": {
+      "place": "Puri coast",
+      "low_m": 1.5,
+      "high_m": 1.5,
+      "kind": "IMD estimate at landfall",
+      "source": "https://rsmcnewdelhi.imd.gov.in/uploads/report/26/26_7122ae_Preliminary%20Report%20on%20ESCS%20FANI_15082020.pdf",
+      "modelled_m": 2.26
+    }
+  },
+  "rain": {
+    "model": "R-CLIPER parametric rain (Tuleya et al. 2007) along the best track",
+    "truth": "NASA GPM IMERG V07, 3 days either side of landfall",
+    "n": 3325,
+    "spearman": 0.7188380121363294,
+    "median_ratio": 1.2543307110202095,
+    "max_modelled_mm": 175.0,
+    "max_observed_mm": 144.0,
+    "extreme_sites": 0
+  },
+  "roads": {
+    "roads": 4432,
+    "km": 9761,
+    "km_cut": 3896,
+    "km_at_risk": 2902,
+    "first_closure": "2019-05-02T21:45:00Z",
+    "cut_by_surge": 9
+  },
+  "insurance": {
+    "terms": "Illustrative: index = wind reached at 25% of a district's sites; pays 25/50/100% at 64/83/96 kt",
+    "districts": [
+      {
+        "district": "Puri",
+        "lat": 19.891,
+        "lon": 85.838,
+        "sites": 339,
+        "index_kt": 123.1536157156421,
+        "payout_share": 1.0,
+        "trigger_time": "2019-05-02T23:15:00Z",
+        "lead_h": 4.25,
+        "lit_substations": 8,
+        "observed_outage_rate": 1.0
+      },
+      {
+        "district": "Khordha",
+        "lat": 20.182,
+        "lon": 85.692,
+        "sites": 446,
+        "index_kt": 116.46740799537369,
+        "payout_share": 1.0,
+        "trigger_time": "2019-05-03T01:00:00Z",
+        "lead_h": 2.5,
+        "lit_substations": 21,
+        "observed_outage_rate": 0.6666666666666666
+      },
+      {
+        "district": "Cuttack",
+        "lat": 20.441,
+        "lon": 85.807,
+        "sites": 418,
+        "index_kt": 111.58604704890992,
+        "payout_share": 1.0,
+        "trigger_time": "2019-05-03T03:30:00Z",
+        "lead_h": 0.0,
+        "lit_substations": 36,
+        "observed_outage_rate": 0.5277777777777778
+      },
+      {
+        "district": "Jagatsinghapur",
+        "lat": 20.254,
+        "lon": 86.407,
+        "sites": 102,
+        "index_kt": 102.33062099435483,
+        "payout_share": 1.0,
+        "trigger_time": "2019-05-03T02:45:00Z",
+        "lead_h": 0.75,
+        "lit_substations": 9,
+        "observed_outage_rate": 0.1111111111111111
+      },
+      {
+        "district": "Jajapur",
+        "lat": 20.836,
+        "lon": 86.205,
+        "sites": 166,
+        "index_kt": 96.58522173004064,
+        "payout_share": 1.0,
+        "trigger_time": "2019-05-03T06:00:00Z",
+        "lead_h": -2.5,
+        "lit_substations": 29,
+        "observed_outage_rate": 0.06896551724137931
+      },
+      {
+        "district": "Ganjam",
+        "lat": 19.432,
+        "lon": 84.821,
+        "sites": 384,
+        "index_kt": 88.75348008339608,
+        "payout_share": 0.5,
+        "trigger_time": "2019-05-02T22:30:00Z",
+        "lead_h": 5.0,
+        "lit_substations": 16,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Srikakulam",
+        "lat": 19.09,
+        "lon": 84.669,
+        "sites": 11,
+        "index_kt": 85.39495985331358,
+        "payout_share": 0.5,
+        "trigger_time": "2019-05-02T21:45:00Z",
+        "lead_h": 5.75,
+        "lit_substations": 1,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Bhadrak",
+        "lat": 20.998,
+        "lon": 86.679,
+        "sites": 196,
+        "index_kt": 85.12074424220212,
+        "payout_share": 0.5,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 8,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Kendrapara",
+        "lat": 20.536,
+        "lon": 86.62,
+        "sites": 192,
+        "index_kt": 82.198658281111,
+        "payout_share": 0.25,
+        "trigger_time": "2019-05-03T05:30:00Z",
+        "lead_h": -2.0,
+        "lit_substations": 3,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Kendujhar",
+        "lat": 21.387,
+        "lon": 85.85,
+        "sites": 65,
+        "index_kt": 81.56273656145098,
+        "payout_share": 0.25,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 5,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Dhenkanal",
+        "lat": 20.789,
+        "lon": 85.544,
+        "sites": 153,
+        "index_kt": 81.11360494734774,
+        "payout_share": 0.25,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 17,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Baleshwar",
+        "lat": 21.458,
+        "lon": 86.93,
+        "sites": 401,
+        "index_kt": 73.95166287312644,
+        "payout_share": 0.25,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 18,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Mayurbhanj",
+        "lat": 21.575,
+        "lon": 86.583,
+        "sites": 45,
+        "index_kt": 73.21214428791765,
+        "payout_share": 0.25,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Nayagarh",
+        "lat": 20.182,
+        "lon": 85.137,
+        "sites": 80,
+        "index_kt": 72.60016637685054,
+        "payout_share": 0.25,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 1,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Purba Medinipur",
+        "lat": 21.653,
+        "lon": 87.531,
+        "sites": 9,
+        "index_kt": 54.69873601985012,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Anugul",
+        "lat": 20.949,
+        "lon": 85.008,
+        "sites": 285,
+        "index_kt": 51.88528176495634,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 28,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Kandhamal",
+        "lat": 20.289,
+        "lon": 84.442,
+        "sites": 5,
+        "index_kt": 47.25264344432442,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Bauda",
+        "lat": 20.575,
+        "lon": 84.478,
+        "sites": 6,
+        "index_kt": 43.68427764807045,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Debagarh",
+        "lat": 21.461,
+        "lon": 84.812,
+        "sites": 16,
+        "index_kt": 38.76981625355637,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      },
+      {
+        "district": "Sambalpur",
+        "lat": 21.322,
+        "lon": 84.449,
+        "sites": 3,
+        "index_kt": 35.46693855434539,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 0,
+        "observed_outage_rate": null
+      }
+    ]
+  },
+  "forecasts": [],
+  "built_at": "2026-09-27T12:33:32Z"
+}

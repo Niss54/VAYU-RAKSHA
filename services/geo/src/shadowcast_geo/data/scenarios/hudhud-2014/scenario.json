@@ -1,0 +1,193 @@
+{
+  "id": "hudhud-2014",
+  "storm": "Hudhud",
+  "season": 2014,
+  "region": {
+    "id": "north-andhra-coast",
+    "name": "North Andhra coast (Visakhapatnam to Srikakulam)",
+    "bbox": [
+      17.2,
+      82.4,
+      18.8,
+      84.3
+    ]
+  },
+  "landfall": "2014-10-12T07:00:00Z",
+  "peak_vmax_kt": 115.0,
+  "track_source": "IBTrACS best track (JTWC intensity and wind radii)",
+  "asset_counts": {
+    "hospital": 605,
+    "school": 395,
+    "substation": 171,
+    "clinic": 169,
+    "water_works": 160,
+    "health_centre": 115,
+    "police": 61,
+    "power_plant": 43,
+    "fire_station": 10
+  },
+  "model": {
+    "intercept": -26.847865888829688,
+    "slope": 0.2515101025609214,
+    "trained_on": "fani-2019",
+    "n": 200,
+    "auc": 0.9729020979020979,
+    "brier": 0.04885342409361702
+  },
+  "skill": {
+    "n": 142.0,
+    "observed_outage_rate": 0.7605633802816901,
+    "auc": 0.7933006535947712,
+    "brier": 0.18952840027559809,
+    "spearman": 0.5630680377458921,
+    "out_of_sample": true
+  },
+  "loss_by_band": [
+    {
+      "low_kt": 0.0,
+      "high_kt": 60.0,
+      "n": 6.0,
+      "p25": 33.67193555711531,
+      "median": 63.27671781829315,
+      "p75": 65.35194107998069
+    },
+    {
+      "low_kt": 60.0,
+      "high_kt": 80.0,
+      "n": 19.0,
+      "p25": 31.772266105987107,
+      "median": 38.54116990829238,
+      "p75": 57.108640663605165
+    },
+    {
+      "low_kt": 80.0,
+      "high_kt": 100.0,
+      "n": 20.0,
+      "p25": 17.87005225282297,
+      "median": 46.42201540262033,
+      "p75": 73.52790556254331
+    },
+    {
+      "low_kt": 100.0,
+      "high_kt": 130.0,
+      "n": 97.0,
+      "p25": 70.24017870852805,
+      "median": 80.24568344019009,
+      "p75": 86.75847373800048
+    }
+  ],
+  "surge": {
+    "peak_m": 1.76,
+    "lat": 17.858,
+    "lon": 83.425,
+    "time": "2014-10-12T07:15:00Z",
+    "coast_points": 122,
+    "flooded_sites": 0,
+    "method": "1D wind setup over ETOPO1 shelf transects plus inverse barometer; no tide, waves or rivers",
+    "observed": {
+      "place": "Visakhapatnam port",
+      "low_m": 1.4,
+      "high_m": 1.4,
+      "kind": "tide gauge",
+      "source": "https://rsmcnewdelhi.imd.gov.in/uploads/report/26/26_fac6af_hud.pdf",
+      "modelled_m": 1.72
+    }
+  },
+  "rain": {
+    "model": "R-CLIPER parametric rain (Tuleya et al. 2007) along the best track",
+    "truth": "NASA GPM IMERG V07, 3 days either side of landfall",
+    "n": 1729,
+    "spearman": 0.8500411653046306,
+    "median_ratio": 1.0510714350253627,
+    "max_modelled_mm": 256.0,
+    "max_observed_mm": 266.0,
+    "extreme_sites": 1162
+  },
+  "roads": {
+    "roads": 2876,
+    "km": 5803,
+    "km_cut": 3143,
+    "km_at_risk": 1618,
+    "first_closure": "2014-10-12T00:00:00Z",
+    "cut_by_surge": 1
+  },
+  "insurance": {
+    "terms": "Illustrative: index = wind reached at 25% of a district's sites; pays 25/50/100% at 64/83/96 kt",
+    "districts": [
+      {
+        "district": "Visakhapatnam",
+        "lat": 17.743,
+        "lon": 83.168,
+        "sites": 993,
+        "index_kt": 114.96728426021834,
+        "payout_share": 1.0,
+        "trigger_time": "2014-10-12T00:15:00Z",
+        "lead_h": 6.75,
+        "lit_substations": 92,
+        "observed_outage_rate": 0.8804347826086957
+      },
+      {
+        "district": "Vizianagaram",
+        "lat": 18.243,
+        "lon": 83.34,
+        "sites": 366,
+        "index_kt": 102.25687841031561,
+        "payout_share": 1.0,
+        "trigger_time": "2014-10-12T02:00:00Z",
+        "lead_h": 5.0,
+        "lit_substations": 24,
+        "observed_outage_rate": 0.625
+      },
+      {
+        "district": "Koraput",
+        "lat": 18.681,
+        "lon": 82.82,
+        "sites": 41,
+        "index_kt": 84.85302119428717,
+        "payout_share": 0.5,
+        "trigger_time": "2014-10-12T09:15:00Z",
+        "lead_h": -2.25,
+        "lit_substations": 5,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "East Godavari",
+        "lat": 17.367,
+        "lon": 82.519,
+        "sites": 49,
+        "index_kt": 76.97648596753164,
+        "payout_share": 0.25,
+        "trigger_time": "2014-10-12T05:45:00Z",
+        "lead_h": 1.25,
+        "lit_substations": 1,
+        "observed_outage_rate": 0.0
+      },
+      {
+        "district": "Srikakulam",
+        "lat": 18.403,
+        "lon": 83.869,
+        "sites": 258,
+        "index_kt": 70.52779334600366,
+        "payout_share": 0.25,
+        "trigger_time": "2014-10-12T03:00:00Z",
+        "lead_h": 4.0,
+        "lit_substations": 18,
+        "observed_outage_rate": 0.6666666666666666
+      },
+      {
+        "district": "Gajapati",
+        "lat": 18.781,
+        "lon": 84.095,
+        "sites": 19,
+        "index_kt": 51.50709211117672,
+        "payout_share": 0.0,
+        "trigger_time": null,
+        "lead_h": null,
+        "lit_substations": 2,
+        "observed_outage_rate": 0.0
+      }
+    ]
+  },
+  "forecasts": [],
+  "built_at": "2026-09-27T12:43:17Z"
+}
