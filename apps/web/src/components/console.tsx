@@ -11,12 +11,16 @@ import { AssetList } from "@/components/asset-list";
 import { BacktestPanel } from "@/components/backtest-panel";
 import { BriefPanel } from "@/components/brief-panel";
 import { CascadeGraph, type CascadeEdge, type CascadeNode } from "@/components/cascade-graph";
+import { AgentBrainHud } from "@/components/agent-brain-hud";
+import { CounterfactualSandbox } from "@/components/counterfactual-sandbox";
 import { ISROPanel } from "@/components/isro-panel";
 import { LiveAlerts } from "@/components/live-alerts";
+import { MultilingualAdvisoryHub } from "@/components/multilingual-advisory-hub";
 import { PreparePanel } from "@/components/prepare-panel";
 import { RazorpayReliefModal } from "@/components/razorpay-relief-modal";
 import { ReplayStrip } from "@/components/replay-strip";
 import { Timeline } from "@/components/timeline";
+import { runVayuRakshaSimulation } from "@/lib/vayu-engine";
 import {
   useAssets,
   useCascade,
@@ -63,7 +67,7 @@ const LEGEND_ENDS: Record<ColorBy, [string, string]> = {
   flood: ["0 m", `${FLOOD_FULL_M} m`],
   rain: ["0 mm", `${RAIN_FULL_MM} mm`],
 };
-const TABS = ["brief", "prioritise", "cascade", "isro", "prepare", "prove"] as const;
+const TABS = ["brief", "agents", "cascade", "isro", "sandbox", "audio", "prioritise", "prepare", "prove"] as const;
 
 interface ConsoleProps {
   scenarios: ScenarioSummary[];
@@ -91,6 +95,11 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
   const [scrub, setScrub] = useState<{ scenarioId: string; ms: number } | null>(null);
   const [playing, setPlaying] = useState(false);
   const [isReliefModalOpen, setIsReliefModalOpen] = useState(false);
+
+  const vayuSimState = useMemo(() => {
+    const sc = scenarioId.includes("dana") ? "dana" : scenarioId.includes("amphan") ? "amphan" : "fani";
+    return runVayuRakshaSimulation(sc);
+  }, [scenarioId]);
 
   const { data: scenario, error: scenarioError } = useScenario(scenarioId);
   const { data: track } = useTrack(scenarioId);
@@ -338,6 +347,21 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
               </>
             )}
             <Readout label="≥50% outage" value={compactNumber(atRisk)} unit="assets" />
+            <button
+              type="button"
+              onClick={() => setTab("agents")}
+              className="glass flex items-center gap-2.5 rounded-2xl px-4 py-2 border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 cursor-pointer transition-all shadow-lg shadow-cyan-950/40"
+              title="Open 5-Agent Multi-Agent Orchestration HUD"
+            >
+              <span className="relative flex size-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                <span className="relative inline-flex rounded-full size-2.5 bg-cyan-400" />
+              </span>
+              <div className="text-left leading-tight">
+                <div className="text-[10px] font-mono tracking-wider font-bold text-cyan-400 uppercase">5 AGENTS ACTIVE</div>
+                <div className="text-[9.5px] font-mono text-slate-300 hidden sm:block">NIRNAY · BHUMI · VAYU · SETU · SANCHAR</div>
+              </div>
+            </button>
           </div>
         )}
       </header>
@@ -435,7 +459,43 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
           />
         </div>
         <div className={clsx("min-h-0 flex-1 flex-col pt-2", tab === "prepare" ? "hidden" : "flex")}>
-          {tab === "brief" && brief && scenario ? (
+          {tab === "agents" ? (
+            <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 pb-4">
+              <div className="space-y-1">
+                <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <span>🧠</span> LANGGRAPH 5-AGENT MULTI-AGENT BRAIN
+                </h3>
+                <p className="text-[11px] text-zinc-400">
+                  Real-time autonomous telemetry across NIRNAY, BHUMI, VAYU, SETU, and SANCHAR agents.
+                </p>
+              </div>
+              <AgentBrainHud telemetry={vayuSimState.agentTelemetry} />
+            </div>
+          ) : tab === "sandbox" ? (
+            <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 pb-4">
+              <div className="space-y-1">
+                <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <span>🧪</span> WHAT-IF COUNTERFACTUAL HARDENING SANDBOX
+                </h3>
+                <p className="text-[11px] text-zinc-400">
+                  Simulate pre-landfall hardening interventions and compute protected citizen delta.
+                </p>
+              </div>
+              <CounterfactualSandbox actions={vayuSimState.rankedActionQueue} />
+            </div>
+          ) : tab === "audio" ? (
+            <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 pb-4">
+              <div className="space-y-1">
+                <h3 className="text-xs font-bold text-emerald-400 uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <span>🗣️</span> SARVAM AI MULTILINGUAL ADVISORY & IVR
+                </h3>
+                <p className="text-[11px] text-zinc-400">
+                  Indigenous sovereign Indian voice synthesis in 6 coastal languages (Odia, Hindi, Bengali, Telugu, Tamil, Marathi).
+                </p>
+              </div>
+              <MultilingualAdvisoryHub advisories={vayuSimState.advisories} />
+            </div>
+          ) : tab === "brief" && brief && scenario ? (
             <BriefPanel
               scenario={scenario}
               forecast={forecast}
