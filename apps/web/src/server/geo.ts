@@ -15,3 +15,21 @@ export async function geoResponse(path: string): Promise<Response> {
 export async function geoFetch<T>(path: string): Promise<T> {
   return (await (await geoResponse(path)).json()) as T;
 }
+
+import type { CascadeSummary, CLIMADAComparison, ISRODataStatus, SARValidation } from "@/lib/types";
+
+export async function fetchCascade(scenarioId: string): Promise<CascadeSummary> {
+  return geoFetch<CascadeSummary>(`/scenarios/${scenarioId}/cascade`);
+}
+
+export async function fetchISRO(scenarioId: string): Promise<ISRODataStatus> {
+  return geoFetch<ISRODataStatus>(`/scenarios/${scenarioId}/isro`);
+}
+
+export async function fetchSAR(scenarioId: string): Promise<SARValidation> {
+  return geoFetch<SARValidation>(`/scenarios/${scenarioId}/sar`);
+}
+
+export async function fetchCLIMADA(scenarioId: string): Promise<CLIMADAComparison> {
+  return geoFetch<CLIMADAComparison>(`/scenarios/${scenarioId}/climada`);
+}

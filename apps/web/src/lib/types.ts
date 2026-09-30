@@ -310,3 +310,74 @@ export interface LiveFeed {
 
 /** Either the best-track replay or one as-issued ensemble forecast. */
 export type ReplayMode = { kind: "best-track" } | { kind: "forecast"; key: string };
+
+// ─── VAYU-RAKSHA EXTENSIONS ───────────────────────────────────────────────
+
+export interface CascadeVictim {
+  asset_id: string;
+  kind: string;
+  name: string | null;
+  lat: number;
+  lon: number;
+  hop: number;
+}
+
+export interface CascadeChain {
+  initiator: string;
+  initiator_kind: string;
+  initiator_name: string | null;
+  initiator_p_outage: number;
+  victims: CascadeVictim[];
+  cascade_population: number;
+  cascade_impact_score: number;
+}
+
+export interface ActionItem {
+  rank: number;
+  asset_id: string;
+  asset_kind: string;
+  asset_name: string | null;
+  hardening_action: string;
+  timing_hours_before_landfall: number;
+  direct_p_outage: number;
+  cascade_victims_prevented: number;
+  cascade_population_protected: number;
+  total_population_benefit: number;
+  benefit_cost_ratio: number;
+  counterfactual_summary: string;
+}
+
+export interface CascadeSummary {
+  top_chains: CascadeChain[];
+  top_actions: ActionItem[];
+  population_at_cascade_risk: number;
+  cascade_edges: number;
+  cascade_nodes: number;
+}
+
+export interface ISRODataStatus {
+  mosdac_available: boolean;
+  insat3ds_intensity_kt: number | null;
+  ri_risk: boolean;
+  sst_c: number | null;
+  risat_sar_validation?: Record<string, unknown> | null;
+  citation: Record<string, string>;
+}
+
+export interface SARValidation {
+  scenario_id: string;
+  sar_source: string;
+  modelled_flooded_assets: number;
+  sar_flooded_cells: number;
+  model_sar_overlap_pct: number | null;
+  iou: number | null;
+  peak_flood_depth_m: number | null;
+  notes: string;
+  citation: string;
+}
+
+export interface CLIMADAComparison {
+  agreement_rate: number;
+  mean_absolute_difference: number;
+  citation: string;
+}

@@ -5,15 +5,29 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
 
+import { ActionQueue } from "@/components/action-queue";
 import { AssetDetail } from "@/components/asset-detail";
 import { AssetList } from "@/components/asset-list";
 import { BacktestPanel } from "@/components/backtest-panel";
 import { BriefPanel } from "@/components/brief-panel";
+import { CascadeGraph, type CascadeEdge, type CascadeNode } from "@/components/cascade-graph";
+import { ISROPanel } from "@/components/isro-panel";
 import { LiveAlerts } from "@/components/live-alerts";
 import { PreparePanel } from "@/components/prepare-panel";
 import { ReplayStrip } from "@/components/replay-strip";
 import { Timeline } from "@/components/timeline";
-import { useAssets, useForecastTracks, useHazard, useRoads, useScenario, useSurge, useTrack } from "@/lib/api";
+import {
+  useAssets,
+  useCascade,
+  useForecastTracks,
+  useHazard,
+  useISRO,
+  useRoads,
+  useSAR,
+  useScenario,
+  useSurge,
+  useTrack,
+} from "@/lib/api";
 import { LANGUAGES, REGION_LANGUAGE } from "@/lib/advisory";
 import { liveAlerts } from "@/lib/alerts";
 import { dutyBrief } from "@/lib/brief";
@@ -48,7 +62,7 @@ const LEGEND_ENDS: Record<ColorBy, [string, string]> = {
   flood: ["0 m", `${FLOOD_FULL_M} m`],
   rain: ["0 mm", `${RAIN_FULL_MM} mm`],
 };
-const TABS = ["brief", "prioritise", "prepare", "prove"] as const;
+const TABS = ["brief", "prioritise", "cascade", "isro", "prepare", "prove"] as const;
 
 interface ConsoleProps {
   scenarios: ScenarioSummary[];
@@ -82,6 +96,56 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
   const { data: members } = useForecastTracks(scenarioId, mode);
   const { data: surge } = useSurge(scenarioId, mode);
   const { data: roads } = useRoads(scenarioId, mode);
+  const { data: cascade } = useCascade(scenarioId);
+  const { data: isro } = useISRO(scenarioId);
+  const { data: sar } = useSAR(scenarioId);
+
+  const topInitiators = useMemo(() => cascade?.top_chains?.map((c) => c.initiator) ?? [], [cascade]);
+
+  const cascadeNodes = useMemo<CascadeNode[]>(() => {
+    if (!cascade?.top_chains) return [];
+    const map = new Map<string, CascadeNode>();
+    for (const c of cascade.top_chains) {
+      if (!map.has(c.initiator)) {
+        map.set(c.initiator, {
+          id: c.initiator,
+          kind: c.initiator_kind,
+          name: c.initiator_name ?? c.initiator,
+          p_outage: c.initiator_p_outage,
+          lat: 0,
+          lon: 0,
+        });
+      }
+      for (const v of c.victims) {
+        if (!map.has(v.asset_id)) {
+          map.set(v.asset_id, {
+            id: v.asset_id,
+            kind: v.kind,
+            name: v.name ?? v.asset_id,
+            p_outage: 0.5,
+            lat: v.lat,
+            lon: v.lon,
+          });
+        }
+      }
+    }
+    return Array.from(map.values());
+  }, [cascade]);
+
+  const cascadeEdges = useMemo<CascadeEdge[]>(() => {
+    if (!cascade?.top_chains) return [];
+    const edges: CascadeEdge[] = [];
+    for (const c of cascade.top_chains) {
+      for (const v of c.victims) {
+        edges.push({
+          source: c.initiator,
+          target: v.asset_id,
+          strength: 1 / Math.max(1, v.hop),
+        });
+      }
+    }
+    return edges;
+  }, [cascade]);
 
   const span = useMemo(() => {
     const times = (track?.features ?? [])
@@ -335,7 +399,7 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
               role="tab"
               aria-selected={tab === name}
               onClick={() => setTab(name)}
-              className="segment flex-1 !px-1 !py-2 !tracking-[0.08em]"
+              className="segment flex-1 !px-0.5 !py-1.5 text-[11px] font-semibold !tracking-[0.03em] uppercase"
             >
               {name}
             </button>
@@ -360,7 +424,26 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
               onShowPriorities={() => setTab("prioritise")}
               onShowFlood={() => setColorBy("flood")}
               onDraftAdvisory={() => setTab("prepare")}
+              onShowCascade={() => setTab("cascade")}
+              onShowISRO={() => setTab("isro")}
             />
+          ) : tab === "cascade" ? (
+            <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 pb-4">
+              <div className="space-y-1">
+                <h3 className="text-xs font-bold text-zinc-100 uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <span>⚡</span> INFRASTRUCTURE CASCADE DEPENDENCY GRAPH
+                </h3>
+                <p className="text-[11px] text-zinc-400">
+                  Multi-hop power-grid failure propagation & counterfactual hardening directives.
+                </p>
+              </div>
+              <CascadeGraph nodes={cascadeNodes} edges={cascadeEdges} topInitiators={topInitiators} />
+              <ActionQueue actions={cascade?.top_actions ?? []} landfallTime={scenario?.landfall} />
+            </div>
+          ) : tab === "isro" ? (
+            <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 pb-4">
+              <ISROPanel isroData={isro} sarData={sar} />
+            </div>
           ) : tab === "prove" && scenario ? (
             <BacktestPanel scenario={scenario} />
           ) : selected ? (

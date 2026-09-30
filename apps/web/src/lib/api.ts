@@ -22,6 +22,10 @@ import type {
   ScenarioDetail,
   SurgePoint,
   TrackFeatureCollection,
+  CascadeSummary,
+  ISRODataStatus,
+  SARValidation,
+  CLIMADAComparison,
 } from "./types";
 
 export const GEO_PREFIX = "/api/geo";
@@ -112,4 +116,24 @@ export function useEvidence(scenarioId: string) {
 /** The live picture from the feed archiver's newest run; refreshed every 15 minutes while the console is open. */
 export function useLive() {
   return useSWR<LiveFeed>(`${GEO_PREFIX}/live`, fetchJson, { refreshInterval: 15 * 60_000, shouldRetryOnError: false });
+}
+
+/** Cascade failure propagation and counterfactual hardening directives. */
+export function useCascade(scenarioId: string) {
+  return useSWR<CascadeSummary>(`${GEO_PREFIX}/scenarios/${scenarioId}/cascade`, fetchJson, STATIC);
+}
+
+/** ISRO MOSDAC INSAT-3DS cyclone telemetry and SST anomalies. */
+export function useISRO(scenarioId: string) {
+  return useSWR<ISRODataStatus>(`${GEO_PREFIX}/scenarios/${scenarioId}/isro`, fetchJson, STATIC);
+}
+
+/** RISAT-1A C-band SAR ground-truth flood validation. */
+export function useSAR(scenarioId: string) {
+  return useSWR<SARValidation>(`${GEO_PREFIX}/scenarios/${scenarioId}/sar`, fetchJson, STATIC);
+}
+
+/** CLIMADA Emanuel damage curve benchmark comparison. */
+export function useCLIMADA(scenarioId: string) {
+  return useSWR<CLIMADAComparison>(`${GEO_PREFIX}/scenarios/${scenarioId}/climada`, fetchJson, STATIC);
 }

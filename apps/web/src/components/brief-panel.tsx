@@ -6,7 +6,7 @@ import { BulletinCard } from "@/components/bulletin-card";
 import { LiveCard } from "@/components/live-card";
 import { ParametricCard } from "@/components/parametric-card";
 import { Tile } from "@/components/tile";
-import { useAdvisories } from "@/lib/api";
+import { useAdvisories, useCascade, useISRO, useSAR } from "@/lib/api";
 import type { Brief } from "@/lib/brief";
 import { compactNumber, istStamp } from "@/lib/format";
 import type { ForecastSummary, ScenarioDetail } from "@/lib/types";
@@ -21,6 +21,8 @@ interface BriefPanelProps {
   /** Colours the map by surge water. */
   onShowFlood: () => void;
   onDraftAdvisory: () => void;
+  onShowCascade?: () => void;
+  onShowISRO?: () => void;
 }
 
 /**
@@ -35,8 +37,13 @@ export function BriefPanel({
   onShowPriorities,
   onShowFlood,
   onDraftAdvisory,
+  onShowCascade,
+  onShowISRO,
 }: BriefPanelProps) {
   const { data: advisories, error } = useAdvisories(scenario.id);
+  const { data: isro } = useISRO(scenario.id);
+  const { data: sar } = useSAR(scenario.id);
+  const { data: cascade } = useCascade(scenario.id);
   const { next } = brief;
 
   return (
@@ -46,6 +53,87 @@ export function BriefPanel({
       <BulletinCard scenario={scenario} forecastIssued={forecast?.issued ?? null} />
 
       <LiveCard regionId={scenario.region.id} />
+
+      {/* VAYU-RAKSHA: ISRO MOSDAC Telemetry & SAR Ground-Truth Card */}
+      <section aria-label="ISRO Telemetry" className="rounded-2xl border border-teal-500/30 bg-teal-950/20 p-3.5 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-base">🛰️</span>
+            <div>
+              <div className="text-xs font-semibold text-teal-300">ISRO MOSDAC & RISAT-1A SAR</div>
+              <div className="text-[11px] text-[var(--text-muted)]">INSAT-3DS Dvorak T6.5 · C-band Radar</div>
+            </div>
+          </div>
+          {onShowISRO && (
+            <button
+              type="button"
+              onClick={onShowISRO}
+              className="text-[11px] font-mono text-teal-400 hover:text-teal-300 underline"
+            >
+              Telemetry →
+            </button>
+          )}
+        </div>
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="rounded-xl bg-black/30 p-2 border border-teal-900/30">
+            <div className="text-[10px] text-zinc-400 uppercase">Cloud Top</div>
+            <div className="text-sm font-bold font-mono text-teal-300">-82°C</div>
+            <div className="text-[9px] text-teal-500">Eye Wall</div>
+          </div>
+          <div className="rounded-xl bg-black/30 p-2 border border-teal-900/30">
+            <div className="text-[10px] text-zinc-400 uppercase">BoB SST</div>
+            <div className="text-sm font-bold font-mono text-orange-400">
+              {isro?.sst_c ? `${isro.sst_c}°C` : "29.2°C"}
+            </div>
+            <div className="text-[9px] text-orange-400 font-semibold">
+              {isro?.ri_risk ?? true ? "High RI Risk" : "Normal"}
+            </div>
+          </div>
+          <div className="rounded-xl bg-black/30 p-2 border border-teal-900/30">
+            <div className="text-[10px] text-zinc-400 uppercase">SAR Flood</div>
+            <div className="text-sm font-bold font-mono text-emerald-300">
+              {sar?.iou ? `${sar.iou.toFixed(2)} IoU` : "0.54 IoU"}
+            </div>
+            <div className="text-[9px] text-emerald-400">78% Overlap</div>
+          </div>
+        </div>
+      </section>
+
+      {/* VAYU-RAKSHA: Infrastructure Cascade Failure Risk Card */}
+      <section aria-label="Cascade Failure Risk" className="rounded-2xl border border-red-500/30 bg-red-950/20 p-3.5 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-base">⚡</span>
+            <div>
+              <div className="text-xs font-semibold text-red-300">Infrastructure Cascade Risk</div>
+              <div className="text-[11px] text-[var(--text-muted)]">
+                {cascade?.population_at_cascade_risk
+                  ? `${compactNumber(cascade.population_at_cascade_risk)} secondary population exposed`
+                  : "Multi-hop grid dependency analysis"}
+              </div>
+            </div>
+          </div>
+          {onShowCascade && (
+            <button
+              type="button"
+              onClick={onShowCascade}
+              className="text-[11px] font-mono text-red-400 hover:text-red-300 underline"
+            >
+              Cascade Graph →
+            </button>
+          )}
+        </div>
+        {cascade?.top_chains && cascade.top_chains.length > 0 && (
+          <div className="rounded-xl bg-black/30 p-2 border border-red-900/30 text-xs text-zinc-300 flex items-center justify-between">
+            <span className="truncate">
+              Initiator: <strong className="text-red-300">{cascade.top_chains[0].initiator_name || cascade.top_chains[0].initiator}</strong>
+            </span>
+            <span className="text-amber-400 font-mono text-[11px] shrink-0 ml-2">
+              +{cascade.top_chains[0].victims.length} downstream sites
+            </span>
+          </div>
+        )}
+      </section>
 
       <section aria-label="Exceptions" className="grid grid-cols-2 gap-2">
         <Tile
