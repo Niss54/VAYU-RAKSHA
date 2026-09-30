@@ -14,6 +14,7 @@ import { CascadeGraph, type CascadeEdge, type CascadeNode } from "@/components/c
 import { ISROPanel } from "@/components/isro-panel";
 import { LiveAlerts } from "@/components/live-alerts";
 import { PreparePanel } from "@/components/prepare-panel";
+import { RazorpayReliefModal } from "@/components/razorpay-relief-modal";
 import { ReplayStrip } from "@/components/replay-strip";
 import { Timeline } from "@/components/timeline";
 import {
@@ -89,6 +90,7 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
   const [colorBy, setColorBy] = useState<ColorBy>("risk");
   const [scrub, setScrub] = useState<{ scenarioId: string; ms: number } | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [isReliefModalOpen, setIsReliefModalOpen] = useState(false);
 
   const { data: scenario, error: scenarioError } = useScenario(scenarioId);
   const { data: track } = useTrack(scenarioId);
@@ -274,12 +276,21 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
       </section>
 
       {/* Mission header: brand, storm, replay, live readouts. */}
-      <header className="relative flex flex-col items-start gap-3 p-4 lg:pointer-events-none lg:absolute lg:top-0 lg:right-[432px] lg:left-0">
-        <div className="glass flex max-w-full items-center gap-3 rounded-full py-1.5 pr-2 pl-2.5 lg:pointer-events-auto">
-          <Image src="/logo.svg" alt="" width={30} height={30} priority />
+      <header className="relative flex flex-col items-start gap-3 p-4 lg:pointer-events-none lg:absolute lg:top-0 lg:right-[432px] lg:left-0 z-20">
+        <div className="glass flex max-w-full items-center gap-3 rounded-full py-1.5 pr-2.5 pl-2 lg:pointer-events-auto shadow-2xl">
+          <Image
+            src="/logo.png"
+            alt="VAYU-RAKSHA Logo"
+            width={34}
+            height={34}
+            className="rounded-lg object-contain shrink-0 shadow"
+            priority
+          />
           <div className="shrink-0 leading-none">
-            <div className="text-[15px] font-semibold tracking-tight">ShadowCast</div>
-            <div className="label mt-1 hidden sm:block">impact forecast · proven by satellite</div>
+            <div className="text-[14px] font-bold tracking-tight text-white flex items-center gap-1.5 font-mono">
+              VAYU-RAKSHA <span className="text-cyan-400 font-sans font-light text-xs">वायु रक्षा</span>
+            </div>
+            <div className="label mt-0.5 hidden sm:block text-[10px] text-zinc-400">Track 5 · Anticipatory Intelligence</div>
           </div>
           <select
             value={scenarioId}
@@ -293,6 +304,15 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
               </option>
             ))}
           </select>
+          <button
+            type="button"
+            onClick={() => setIsReliefModalOpen(true)}
+            className="cursor-pointer shrink-0 rounded-full border border-emerald-500/50 bg-emerald-500/15 px-3 py-1 text-[11px] font-semibold text-emerald-400 hover:bg-emerald-500/25 hover:border-emerald-400 transition-all flex items-center gap-1.5 shadow-lg shadow-emerald-950/40"
+            title="Open Live Disaster Relief Fund (Razorpay)"
+          >
+            <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="hidden sm:inline">₹ RELIEF FUND</span>
+          </button>
         </div>
 
         <div className="lg:pointer-events-auto">
@@ -467,6 +487,11 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
           )}
         </div>
       </aside>
+
+      <RazorpayReliefModal
+        isOpen={isReliefModalOpen}
+        onClose={() => setIsReliefModalOpen(false)}
+      />
     </div>
   );
 }

@@ -1,10 +1,12 @@
 /**
- * Google Cloud clients for the server: Gemini on Vertex AI, the Firestore audit log and the cache of bulletin readings.
- * Locally they use Application Default Credentials (gcloud); on Vercel they use Workload Identity Federation, with no
- * service-account key anywhere.
+ * Google Cloud clients for the server: Gemini on Google AI Studio / Vertex AI, the Firestore audit log
+ * and the cache of bulletin readings.
+ * Locally supports GEMINI_API_KEY (from Google AI Studio) or Application Default Credentials (gcloud);
+ * on Vercel supports GEMINI_API_KEY or Workload Identity Federation.
  */
 import { Firestore } from "@google-cloud/firestore";
 import { createVertex } from "@ai-sdk/google-vertex";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { getVercelOidcToken } from "@vercel/oidc";
 import { type ExternalAccountClientOptions, ExternalAccountClient } from "google-auth-library";
 
@@ -39,10 +41,17 @@ const federated: ExternalAccountClientOptions | undefined =
       }
     : undefined;
 
-export const GEMINI_MODEL = "gemini-3.8-flash";
+export const GEMINI_MODEL =
+  process.env.GEMINI_MODEL ??
+  (process.env.GEMINI_API_KEY ? "gemini-1.5-flash" : "gemini-1.5-flash");
 
-/** Gemini 3.x models are served only from the global Vertex AI endpoint. */
-export const vertex = createVertex({
+/** Google AI Studio client when GEMINI_API_KEY is provided */
+const googleStudio = process.env.GEMINI_API_KEY
+  ? createGoogleGenerativeAI({ apiKey: process.env.GEMINI_API_KEY })
+  : null;
+
+/** Vertex AI client fallback */
+const vertexBackend = createVertex({
   project: PROJECT,
   location: "global",
   googleAuthOptions: federated
@@ -52,17 +61,48 @@ export const vertex = createVertex({
     : undefined,
 });
 
-const firestore = new Firestore({
-  projectId: PROJECT,
-  ...(federated
-    ? { authClient: ExternalAccountClient.fromJSON(federated) }
-    : serviceAccountCredentials
-    ? { credentials: serviceAccountCredentials }
-    : {}),
-});
-const advisories = firestore.collection("advisories");
+/** Return either Google Generative AI (if GEMINI_API_KEY is set) or Vertex AI */
+const vertexCallable = (modelId: string = GEMINI_MODEL) => {
+  if (process.env.GEMINI_API_KEY && googleStudio) {
+    const normalizedModel =
+      modelId === "gemini-3.8-flash"
+        ? (process.env.GEMINI_MODEL ?? "gemini-1.5-flash")
+        : modelId;
+    return googleStudio(normalizedModel);
+  }
+  return vertexBackend(modelId);
+};
+
+vertexCallable.speech = (modelId: string) => {
+  if (process.env.GEMINI_API_KEY && typeof googleStudio?.speech === "function") {
+    return googleStudio.speech(modelId);
+  }
+  return vertexBackend.speech(modelId);
+};
+
+vertexCallable.languageModel = (modelId: string) => vertexCallable(modelId);
+
+export const vertex = vertexCallable;
+
+let firestoreInstance: Firestore | null = null;
+try {
+  firestoreInstance = new Firestore({
+    projectId: PROJECT,
+    ...(federated
+      ? { authClient: ExternalAccountClient.fromJSON(federated) }
+      : serviceAccountCredentials
+      ? { credentials: serviceAccountCredentials }
+      : {}),
+  });
+} catch (error) {
+  console.warn("[Firestore] Failed to initialize client, will use in-memory store:", (error as Error).message);
+}
 
 const ALREADY_EXISTS = 6; // gRPC status code
+
+/** In-memory fallbacks when Firestore credentials are not configured */
+const inMemoryAdvisories = new Map<string, AdvisoryRecord>();
+const inMemoryCache = new Map<string, any>();
 
 /** Write a document once; a concurrent or repeated write of the same id is a no-op (first writer wins). */
 async function createOnce(ref: FirebaseFirestore.DocumentReference, data: object): Promise<void> {
@@ -89,7 +129,15 @@ export interface AdvisoryRecord {
  * decision is written once, and replays of the same conversation (the client resends history) are no-ops.
  */
 export async function recordDecision(toolCallId: string, record: AdvisoryRecord): Promise<void> {
-  await createOnce(advisories.doc(toolCallId), record);
+  try {
+    if (firestoreInstance) {
+      await createOnce(firestoreInstance.collection("advisories").doc(toolCallId), record);
+      return;
+    }
+  } catch (error) {
+    console.warn("[Firestore] recordDecision fallback to in-memory store:", (error as Error).message);
+  }
+  inMemoryAdvisories.set(toolCallId, record);
 }
 
 const inflight = new Map<string, Promise<unknown>>();
@@ -112,11 +160,21 @@ export function cachedReading<T extends object>(
   const pending =
     (inflight.get(key) as Promise<T | null> | undefined) ??
     (async () => {
-      const ref = firestore.collection(collection).doc(id);
-      const snapshot = await ref.get();
-      if (snapshot.exists) return snapshot.data() as T;
+      try {
+        if (firestoreInstance) {
+          const ref = firestoreInstance.collection(collection).doc(id);
+          const snapshot = await ref.get();
+          if (snapshot.exists) return snapshot.data() as T;
+          const fresh = await read();
+          if (fresh) await createOnce(ref, fresh);
+          return fresh;
+        }
+      } catch (error) {
+        console.warn(`[Firestore] cachedReading fallback to in-memory for ${key}:`, (error as Error).message);
+      }
+      if (inMemoryCache.has(key)) return inMemoryCache.get(key) as T;
       const fresh = await read();
-      if (fresh) await createOnce(ref, fresh);
+      if (fresh) inMemoryCache.set(key, fresh);
       return fresh;
     })().finally(() => inflight.delete(key));
   inflight.set(key, pending);
@@ -130,13 +188,37 @@ const SCAN_LIMIT = 100;
  * single-field index) and sorts the small result here, so no composite index is needed.
  */
 export async function listAdvisories(scenarioId: string, limit: number): Promise<AdvisorySummary[]> {
-  const snapshot = await advisories.where("scenarioId", "==", scenarioId).limit(SCAN_LIMIT).get();
-  return snapshot.docs
-    .map((doc) => {
-      const record = doc.data() as AdvisoryRecord;
+  try {
+    if (firestoreInstance) {
+      const snapshot = await firestoreInstance
+        .collection("advisories")
+        .where("scenarioId", "==", scenarioId)
+        .limit(SCAN_LIMIT)
+        .get();
+      return snapshot.docs
+        .map((doc) => {
+          const record = doc.data() as AdvisoryRecord;
+          const info = record.advisory.infos.find((i) => i.language === "en") ?? record.advisory.infos[0];
+          return {
+            id: doc.id,
+            status: record.status,
+            replay: record.replay,
+            headline: info.headline,
+            decidedAt: record.decidedAt,
+          };
+        })
+        .sort((a, b) => b.decidedAt.localeCompare(a.decidedAt))
+        .slice(0, limit);
+    }
+  } catch (error) {
+    console.warn("[Firestore] listAdvisories fallback to in-memory store:", (error as Error).message);
+  }
+  return Array.from(inMemoryAdvisories.entries())
+    .filter(([, r]) => r.scenarioId === scenarioId)
+    .map(([id, record]) => {
       const info = record.advisory.infos.find((i) => i.language === "en") ?? record.advisory.infos[0];
       return {
-        id: doc.id,
+        id,
         status: record.status,
         replay: record.replay,
         headline: info.headline,
@@ -144,11 +226,18 @@ export async function listAdvisories(scenarioId: string, limit: number): Promise
       };
     })
     .sort((a, b) => b.decidedAt.localeCompare(a.decidedAt))
-    .slice(0, limit);
+        .slice(0, limit);
 }
 
 /** An audited advisory by id, or null when there is none. */
 export async function getAdvisory(id: string): Promise<AdvisoryRecord | null> {
-  const snapshot = await advisories.doc(id).get();
-  return snapshot.exists ? (snapshot.data() as AdvisoryRecord) : null;
+  try {
+    if (firestoreInstance) {
+      const snapshot = await firestoreInstance.collection("advisories").doc(id).get();
+      return snapshot.exists ? (snapshot.data() as AdvisoryRecord) : null;
+    }
+  } catch (error) {
+    console.warn("[Firestore] getAdvisory fallback to in-memory store:", (error as Error).message);
+  }
+  return inMemoryAdvisories.get(id) ?? null;
 }
