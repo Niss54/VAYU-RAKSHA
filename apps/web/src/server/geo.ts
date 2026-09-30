@@ -1,6 +1,14 @@
-/** Server-side access to the geo API (page rendering and agent tools; the browser goes through the /api/geo rewrite). */
+function normalizeGeoUrl(raw: string | undefined): string {
+  const fallback = "https://shadowcast-geo-489356738785.asia-south1.run.app";
+  if (!raw || !raw.trim()) return fallback;
+  let url = raw.trim().replace(/\/+$/, "");
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    url = `https://${url}`;
+  }
+  return url;
+}
 
-export const GEO_API_URL = process.env.GEO_API_URL ?? "https://shadowcast-geo-489356738785.asia-south1.run.app";
+export const GEO_API_URL = normalizeGeoUrl(process.env.GEO_API_URL);
 
 const TIMEOUT_MS = 10_000;
 

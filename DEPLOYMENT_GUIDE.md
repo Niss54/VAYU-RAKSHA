@@ -45,7 +45,7 @@ This guide walks you through deploying the **VAYU-RAKSHA** platform in less than
 
 | Variable Name | Value / Source | Required? |
 |---|---|:---:|
-| `GEO_API_URL` | Your Railway backend URL from Part 1 | **Yes** |
+| `GEO_API_URL` | Your Railway backend URL with `https://` (e.g. `https://vayu-raksha-production.up.railway.app`) | **Yes** |
 | `NEXT_PUBLIC_RAZORPAY_KEY_ID` | `rzp_live_TiDzKorTN30dVk` (or from `.env.local`) | **Yes (Live)** |
 | `RAZORPAY_KEY_ID` | `rzp_live_TiDzKorTN30dVk` (or from `.env.local`) | **Yes (Live)** |
 | `RAZORPAY_KEY_SECRET` | Copy from `RAZORPAY_KEY_SECRET` in `.env.local` | **Yes (Live)** |

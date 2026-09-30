@@ -2,6 +2,9 @@
   "name": "vayu-raksha",
   "private": true,
   "scripts": {
+    "build": "npm run --prefix apps/web build",
+    "start": "npm run --prefix apps/web start",
+    "dev": "npm run --prefix apps/web dev",
     "docker:build": "docker compose build",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
