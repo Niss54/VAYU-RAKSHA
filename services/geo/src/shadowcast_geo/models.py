@@ -251,3 +251,93 @@ class HazardSnapshot(Schema):
     storm: StormPosition | None
     asset_ids: list[str]
     wind_kt: list[float]
+
+
+# ─── VAYU-RAKSHA EXTENSIONS ───────────────────────────────────────────────
+
+
+class CascadeVictim(Schema):
+    """One asset that would fail as a result of cascade from an initiator."""
+
+    asset_id: str
+    kind: str
+    name: str | None = None
+    lat: float
+    lon: float
+    hop: int = Field(description="Cascade depth: 1 = direct dependent, 2 = second-order, etc.")
+
+
+class CascadeChain(Schema):
+    """One initiator and the chain of assets that fail because of it."""
+
+    initiator: str
+    initiator_kind: str
+    initiator_name: str | None = None
+    initiator_p_outage: float
+    victims: list[CascadeVictim] = Field(default_factory=list)
+    cascade_population: float = 0.0
+    cascade_impact_score: float = 0.0
+
+
+class ActionItem(Schema):
+    """One ranked pre-landfall hardening action."""
+
+    rank: int
+    asset_id: str
+    asset_kind: str
+    asset_name: str | None = None
+    hardening_action: str
+    timing_hours_before_landfall: int
+    direct_p_outage: float
+    cascade_victims_prevented: int
+    cascade_population_protected: float
+    total_population_benefit: float
+    benefit_cost_ratio: float
+    counterfactual_summary: str
+
+
+class CascadeSummary(Schema):
+    """Full cascade failure analysis for a scenario."""
+
+    top_chains: list[CascadeChain] = Field(default_factory=list)
+    top_actions: list[ActionItem] = Field(default_factory=list)
+    population_at_cascade_risk: float = 0.0
+    cascade_edges: int = Field(default=0, description="Number of dependency edges in the graph")
+    cascade_nodes: int = Field(default=0, description="Total assets in the dependency graph")
+
+
+class ISRODataStatus(Schema):
+    """ISRO satellite data availability for this scenario."""
+
+    mosdac_available: bool = False
+    insat3ds_intensity_kt: float | None = None
+    ri_risk: bool = False
+    sst_c: float | None = None
+    risat_sar_validation: dict[str, Any] | None = None
+    citation: dict[str, str] = Field(default_factory=dict)
+
+
+class SARValidation(Schema):
+    """SAR-vs-model flood validation result."""
+
+    scenario_id: str
+    sar_source: str
+    modelled_flooded_assets: int
+    sar_flooded_cells: int
+    model_sar_overlap_pct: float | None = None
+    iou: float | None = None
+    peak_flood_depth_m: float | None = None
+    notes: str = ""
+    citation: str = ""
+
+
+class ScenarioDetailV2(Schema):
+    """Extended scenario detail with VAYU-RAKSHA cascade and ISRO layers."""
+
+    id: str
+    storm: str
+    season: int
+    cascade: CascadeSummary | None = None
+    isro: ISRODataStatus | None = None
+    sar_validation: SARValidation | None = None
+    climada_comparison: dict[str, Any] | None = None

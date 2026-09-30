@@ -61,6 +61,12 @@ def rank_assets(
     if "p_outage" not in ranked:
         ranked["p_outage"] = model.predict(ranked["peak_wind_kt"].to_numpy(dtype=float))
     ranked["score"] = ranked["p_outage"] * ranked["criticality"] / 5.0
+    if "cascade_contribution" in ranked.columns:
+        cascade_bonus = (ranked["cascade_contribution"].fillna(0) * 0.2).clip(upper=0.2)
+        ranked["score"] = (ranked["score"] + cascade_bonus).clip(upper=1.0)
+        ranked["cascade_contribution"] = ranked["cascade_contribution"].fillna(0)
+    else:
+        ranked["cascade_contribution"] = 0.0
     population = ranked["population"] if "population" in ranked else pd.Series(0.0, index=ranked.index)
     gales = ranked["p34"] * ranked["criticality"] if "p34" in ranked else pd.Series(0.0, index=ranked.index)
     # Scores are compared at 1e-4 resolution so negligible outage probabilities tie and gale exposure decides.

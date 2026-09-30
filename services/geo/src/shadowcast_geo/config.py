@@ -356,3 +356,40 @@ class Settings:
             allowed_origins=tuple(o.strip() for o in origins.split(",")) if origins else cls.allowed_origins,
             archive_bucket=env.get("GEO_ARCHIVE_BUCKET") or cls.archive_bucket,
         )
+
+
+# ─── VAYU-RAKSHA CONSTANTS ────────────────────────────────────────────────
+
+# Cascade failure engine
+CASCADE_OUTAGE_THRESHOLD: float = 0.70    # P(outage) above this = initiator for cascade
+CASCADE_MAX_HOPS: int = 3                 # Maximum dependency hops to propagate
+
+# CLIMADA Emanuel (2011) wind-damage function parameters
+CLIMADA_VHALF_MS: float = 74.7            # wind at 50% damage (m/s) — residential
+CLIMADA_VTHRESH_MS: float = 25.7          # threshold for damage onset (m/s)
+CLIMADA_EXPONENT: float = 3.0             # damage curve exponent
+
+# MOSDAC / ISRO
+MOSDAC_BASE_URL: str = "https://www.mosdac.gov.in/live/api"
+MOSDAC_RI_SST_THRESHOLD_C: float = 1.0    # SST anomaly (°C) above which RI risk is flagged
+
+# SAR flood validation thresholds
+SAR_SIGMA0_WATER_DB: float = -15.0        # VV sigma0 below this = water surface
+SAR_CHANGE_THRESHOLD_DB: float = 3.0      # decrease > this between pre/post = new flood
+SAR_MIN_IOU_ACCEPTABLE: float = 0.40      # IoU below this triggers a model limitation note
+
+# LangGraph agent settings
+LANGGRAPH_MAX_ITERATIONS: int = 2         # NIRNAY supervisor iteration cap
+LANGGRAPH_TIMEOUT_SECONDS: int = 120      # per-agent timeout
+
+# Hardening timing windows (hours before landfall)
+HARDENING_WINDOWS: dict[str, int] = {
+    "substation": 36,
+    "power_plant": 48,
+    "water_works": 48,
+    "hospital": 24,
+    "health_centre": 24,
+    "fire_station": 12,
+    "police": 12,
+    "cyclone_shelter": 48,
+}
