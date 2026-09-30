@@ -3,5 +3,5 @@
   "buildCommand": "npm run --prefix apps/web build",
   "outputDirectory": "apps/web/.next",
   "framework": "nextjs",
-  "installCommand": "npm install"
+  "installCommand": "npm install --legacy-peer-deps"
 }
