@@ -17,7 +17,7 @@
 For deep mathematical formulations, scientific derivations, and validation benchmark tables, refer to:  
 👉 **[`VAYU_RAKSHA_BLUEPRINT.md`](file:///c:/Users/nisha/OneDrive/Documents/Downloads/gdg/VAYU_RAKSHA_BLUEPRINT.md)**
 
----
+
 
 ## 🎯 The Critical Gap We Fill
 
