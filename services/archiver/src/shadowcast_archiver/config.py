@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-USER_AGENT = "shadowcast-archiver/0.1 (+https://github.com/tsathya98/shadowcast)"
+USER_AGENT = "vayu-raksha-archiver/0.1 (+https://github.com/Niss54/VAYU-RAKSHA)"
 
 GDACS_API = "https://www.gdacs.org/gdacsapi/api"
 SACHET_RSS = "https://sachet.ndma.gov.in/cap_public_website/rss/rss_{slug}.xml"

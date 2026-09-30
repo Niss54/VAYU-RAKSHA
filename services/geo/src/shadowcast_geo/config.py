@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from pathlib import Path
 
-USER_AGENT = "shadowcast-geo/0.1 (+https://github.com/tsathya98/shadowcast)"
+USER_AGENT = "vayu-raksha-geo/0.1 (+https://github.com/Niss54/VAYU-RAKSHA)"
 
 IBTRACS_NI_CSV = (
     "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs"

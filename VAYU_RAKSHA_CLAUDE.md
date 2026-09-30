@@ -2,8 +2,8 @@
 ## Complete Agent Instructions for Building a Hackathon Winner on Top of ShadowCast
 
 **Project:** VAYU-RAKSHA  
-**Base repo:** ShadowCast (`tsathya98/shadowcast`) — we fork this, not start from scratch  
-**Target repo:** `github.com/Niss54/vayu-raksha`  
+**Repository:** `github.com/Niss54/VAYU-RAKSHA`  
+**Architecture:** 5-Tier Sovereign Cyclone & Cascade Intelligence Engine  
 **Hackathon:** Build with AI: Code for Communities — Track 5  
 **Deadline:** 30 Sep 2026, 23:59 IST  
 **Goal:** Top 5% / Winner  
@@ -18,9 +18,8 @@ Read it completely before touching any code.
 Never hallucinate APIs, never skip tests, never invent file paths.  
 Every code block in this file is production-quality — copy it exactly.
 
-**The strategy in one sentence:**  
-ShadowCast is excellent at *per-asset impact forecasting*.  
-VAYU-RAKSHA adds what ShadowCast explicitly does NOT have:  
+**The core system architecture:**  
+VAYU-RAKSHA delivers end-to-end anticipatory cyclone and infrastructure cascade intelligence:  
 (1) ISRO MOSDAC + RISAT-1A satellite integration,  
 (2) Infrastructure cascade failure graph (NetworkX),  
 (3) Pre-landfall counterfactual action optimizer,  
@@ -32,11 +31,9 @@ VAYU-RAKSHA adds what ShadowCast explicitly does NOT have:
 ## 1. REPO SETUP — DO THIS FIRST, NOTHING ELSE
 
 ```bash
-# 1. Clone ShadowCast as our starting point
-git clone https://github.com/tsathya98/shadowcast.git vayu-raksha
-cd vayu-raksha
-git remote rename origin shadowcast-upstream
-git remote add origin https://github.com/Niss54/vayu-raksha.git
+# 1. Initialize VAYU-RAKSHA repository
+git checkout -b main
+git remote add origin https://github.com/Niss54/VAYU-RAKSHA.git
 
 # 2. Create a new branch (never touch main directly)
 git checkout -b feat/vayu-raksha-enhancements
@@ -2192,17 +2189,17 @@ Content: Full project description for judges including:
 
 ```markdown
 # VAYU-RAKSHA
-### Built on ShadowCast (tsathya98/shadowcast) · Team Syntrix
+### Anticipatory Cyclone & Cascade Intelligence · Team SYNTRIX
 
-**VAYU-RAKSHA** extends the excellent ShadowCast platform with 5 innovations:
+**VAYU-RAKSHA** delivers comprehensive anticipatory disaster resilience with 5 innovations:
 
-| Feature | ShadowCast | VAYU-RAKSHA |
+| Feature | Standard Baseline | VAYU-RAKSHA |
 |---|---|---|
 | ISRO satellite data | ❌ (Western only) | ✅ MOSDAC + RISAT-1A + INSAT-3DS |
 | Cascade failure modeling | ❌ (per-asset only) | ✅ NetworkX 3-hop propagation |
 | Counterfactual optimizer | ❌ | ✅ Ranked pre-landfall action queue |
 | CLIMADA validation | ❌ | ✅ ETH Zürich Emanuel curves |
-| Multi-agent architecture | Single Gemini | ✅ LangGraph 5-agent StateGraph |
+| Multi-agent architecture | Single LLM | ✅ LangGraph 5-agent StateGraph |
 
 **Demo:** Cyclone FANI (2019, Odisha) — real IBTrACS + GEE + OSM data.
 **Live:** [your-vercel-url]  
@@ -2347,10 +2344,10 @@ git commit -m "docs: add VAYU-RAKSHA blueprint and agent instructions
 When submitting, clearly credit all sources:
 
 ```
-Base platform:    ShadowCast (tsathya98/shadowcast, Apache-2.0)
-                  — we fork and extend, not re-implement
+Platform:         VAYU-RAKSHA (Team SYNTRIX)
+                  — Autonomous Anticipatory Infrastructure Protection
 
-VIIRS validation: ShadowCast outage model — VIIRS VNP46A2 night-light loss,
+VIIRS validation: NASA VIIRS VNP46A2 night-light loss,
                   logistic regression fitted on Cyclone Fani 2019 substations
 
 CLIMADA curves:   Aznar-Siguan & Bresch (2019), GMD 12:3085-3103
