@@ -343,7 +343,7 @@ export function Console({ scenarios, mapsApiKey }: ConsoleProps) {
       </header>
 
       {/* Live alerts float over the map's top-right, clear of the readouts and the panel. */}
-      <div className="pointer-events-none absolute top-[84px] right-[432px] hidden lg:block">
+      <div className="pointer-events-none absolute top-[84px] right-[432px] hidden lg:block z-30">
         <div className="pointer-events-auto">
           <LiveAlerts alerts={alerts} onSelect={openAsset} />
         </div>

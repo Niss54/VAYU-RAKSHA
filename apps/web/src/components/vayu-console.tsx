@@ -108,16 +108,16 @@ SAR Flood Area: ${state.earthData.waterExtentSqkm} sq km
 
 ## 1. PRE-LANDFALL ACTION QUEUE
 ${state.rankedActionQueue
-  .map(
-    (a, i) =>
-      `### #${i + 1} [${a.priority}] ${a.actionTitle}
+        .map(
+          (a, i) =>
+            `### #${i + 1} [${a.priority}] ${a.actionTitle}
 - Deadline: ${a.windowDeadline}
 - Protected Population: +${a.deltaPopulationProtected.toLocaleString()}
 - Saved Cascade Nodes: ${a.cascadeNodesSaved}
 - Rationale: ${a.description}
 `
-  )
-  .join("\n")}
+        )
+        .join("\n")}
 
 ## 2. PARAMETRIC REINSURANCE SMART DISBURSEMENT
 - Status: ${state.parametricInsurance.triggerStatus}
@@ -194,31 +194,28 @@ ${state.rankedActionQueue
             <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-white/10">
               <button
                 onClick={() => handleScenarioChange("fani")}
-                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
-                  scenario === "fani"
+                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${scenario === "fani"
                     ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
                     : "text-slate-400 hover:text-slate-200"
-                }`}
+                  }`}
               >
                 Cyclone Fani (2019)
               </button>
               <button
                 onClick={() => handleScenarioChange("dana")}
-                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
-                  scenario === "dana"
+                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${scenario === "dana"
                     ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
                     : "text-slate-400 hover:text-slate-200"
-                }`}
+                  }`}
               >
                 Cyclone Dana (2024)
               </button>
               <button
                 onClick={() => handleScenarioChange("amphan")}
-                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
-                  scenario === "amphan"
+                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${scenario === "amphan"
                     ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
                     : "text-slate-400 hover:text-slate-200"
-                }`}
+                  }`}
               >
                 Amphan (2020)
               </button>
@@ -284,11 +281,10 @@ ${state.rankedActionQueue
                     setActiveTab(tab.id as any);
                     tacticalSound.playRadarPing();
                   }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
-                    isActive
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${isActive
                       ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-sm shadow-cyan-500/25"
                       : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/80"
-                  }`}
+                    }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
                   {tab.label}
@@ -386,11 +382,10 @@ ${state.rankedActionQueue
                   {dutyChat.map((msg, idx) => (
                     <div
                       key={idx}
-                      className={`p-3 rounded-xl ${
-                        msg.role === "analyst"
+                      className={`p-3 rounded-xl ${msg.role === "analyst"
                           ? "bg-slate-900/90 border border-cyan-500/20 text-slate-200"
                           : "bg-cyan-500/15 border border-cyan-500/30 text-cyan-100 ml-4"
-                      }`}
+                        }`}
                     >
                       <div className="font-mono text-[10px] text-slate-400 mb-1">
                         {msg.role === "analyst" ? "🤖 NIRNAY DUTY ANALYST" : "👤 DUTY OFFICER"}

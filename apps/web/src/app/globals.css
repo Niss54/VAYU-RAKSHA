@@ -36,7 +36,50 @@ body {
   overflow-x: hidden;
 }
 
-@layer components {
+  /* Floating instrument panel over the map. */
+  .glass {
+    background: rgba(18, 22, 28, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* Tracked uppercase instrument label. */
+  .label {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .readout {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Pill segmented control. */
+  .segment {
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: color 150ms, background-color 150ms;
+  }
+  .segment:hover {
+    color: var(--text-primary);
+  }
+  .segment[aria-checked="true"],
+  .segment[aria-selected="true"],
+  .segment[aria-pressed="true"] {
+    background: var(--text-primary);
+    color: var(--surface-0);
+  }
+
   /* Tactical Cyber Glass Panel */
   .glass-tactical {
     background: var(--glass);
@@ -133,7 +176,69 @@ body {
   background: rgba(0, 245, 255, 0.25);
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 245, 255, 0.5);
+/* Live alert cards land slightly tilted and slide in as the replay moves. */
+@keyframes alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) rotate(var(--tilt, 0deg)) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--tilt, 0deg));
+  }
+}
+.alert-card {
+  transform: rotate(var(--tilt, 0deg));
+  animation: alert-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .alert-card {
+    animation: none;
+  }
+}
+
+/* Timeline scrubber: hairline track, amber thumb. */
+input[type="range"].scrub {
+  appearance: none;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"].scrub::-webkit-slider-runnable-track {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.25);
+}
+input[type="range"].scrub::-moz-range-track {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.25);
+}
+input[type="range"].scrub::-webkit-slider-thumb {
+  appearance: none;
+  margin-top: -7px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #f28a2e;
+  box-shadow: 0 0 0 4px rgba(242, 138, 46, 0.35);
+}
+input[type="range"].scrub::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #f28a2e;
+  box-shadow: 0 0 0 4px rgba(242, 138, 46, 0.35);
+}
+
+/* deck.gl tooltip, restyled as an instrument readout. */
+.deck-tooltip {
+  background: #15171b !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  font-size: 12px !important;
+  white-space: pre-line;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
 
